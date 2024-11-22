@@ -7,6 +7,14 @@ GIT
       rails (~> 7.0.4)
       simple_command (~> 1.0.1)
 
+GIT
+  remote: git@github.com:Rexy-Technology/rexy-admin.git
+  revision: 228207fb2c77228d6c73fc57c8e815ddc0637f71
+  branch: 0.4
+  specs:
+    rexy_admin (0.1.0)
+      rails (~> 7.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -298,6 +306,7 @@ DEPENDENCIES
   puma (>= 5.0)
   rack-cors
   rails (~> 7.0.4)
+  rexy_admin!
   rubocop-rails-omakase
   simple_command
   solid_cable
