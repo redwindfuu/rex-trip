@@ -19,6 +19,12 @@ class ApplicationController < ActionController::API
     !!request.env.fetch("HTTP_AUTHORIZATION",
                         "").scan(/Bearer/).flatten.first
   end
+  def add_blacklist_token(auth_token, type)
+    BlacklistedToken.create(token: auth_token, type: type)
+  end
 
+  def in_blacklist?(auth_token , type)
+    BlacklistedToken.find_by(token: auth_token, type: type)
+  end
 
 end

@@ -58,6 +58,6 @@ gem "simple_command"
 
 gem "uuid7", "~> 0.2.0"
 
-gem "params_checker", git: 'git@github.com:Rexy-Technology/params-checker.git', branch: "0.2"
+gem "params_checker", git: "git@github.com:Rexy-Technology/params-checker.git", branch: "0.2"
 
-gem 'rexy_admin', git: 'git@github.com:Rexy-Technology/rexy-admin.git', branch: '0.4'
+gem "rexy_admin", git: "git@github.com:Rexy-Technology/rexy-admin.git", branch: "0.4"
