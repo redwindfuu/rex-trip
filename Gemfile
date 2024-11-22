@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 8.0.0"
+gem "rails", "~> 7.0.4"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 # Use the Puma web server [https://github.com/puma/puma]
@@ -51,3 +51,11 @@ end
 
 
 gem "jwt", "~> 2.9"
+
+gem "pry", "~> 0.15.0"
+
+gem "simple_command"
+
+gem "uuid7", "~> 0.2.0"
+
+gem "params_checker", git: 'git@github.com:Rexy-Technology/params-checker.git', branch: "0.2"

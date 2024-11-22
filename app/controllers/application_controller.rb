@@ -2,16 +2,23 @@ class ApplicationController < ActionController::API
   # include Response
   # include ExceptionHandler
   # include ActionController::MimeResponds
-  # include ActionController::ImplicitRender
+  include ActionController::Cookies
   #
   # # called before every action on controllers
   # before_action :authorize_request
   # attr_reader :current_user
   #
-  # private
-  #
-  # # Check for valid request token and return user
-  # def authorize_request
-  #   @current_user = AuthorizeApiRequest.new(request.headers).call[:user]
-  # end
+  private
+  def token
+    request.env["HTTP_AUTHORIZATION"].scan(/Bearer (.*)$/).flatten.last
+  end
+  def auth
+    Auth.decode(token)
+  end
+  def auth_present?
+    !!request.env.fetch("HTTP_AUTHORIZATION",
+                        "").scan(/Bearer/).flatten.first
+  end
+
+
 end

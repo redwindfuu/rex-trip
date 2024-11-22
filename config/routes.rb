@@ -6,7 +6,8 @@ Rails.application.routes.draw do
       collection do
         post "login" => "admins#login"
         post "logout" => "admins#logout"
-        post "register" => "admins#register"
+        post "refresh" => "admins#refresh_token"
+        get "me" => "admins#get_information"
       end
     end
 
