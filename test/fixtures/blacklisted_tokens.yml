@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  jti: MyString
+  uuid: 
+  type: 
+  exp: 2024-11-22 13:13:12
+
+two:
+  jti: MyString
+  uuid: 
+  type: 
+  exp: 2024-11-22 13:13:12
