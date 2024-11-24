@@ -1,5 +1,36 @@
+# require 'errors/unauthorized'
+
 class Api::AdminsController < ApplicationController
-  before_action :authenticate_admin, only: [:logout , :get_information]
+  before_action :authenticate_admin
+  skip_before_action :authenticate_admin, only: [:login, :refresh_token]
+
+  def review_kyc
+    command = AdminCommands::ReviewKycCommand.call(@current_admin, params[:driver_id], params[:status], params[:review])
+    if command.success?
+      render json: { data: command.result }, status: :ok
+    else
+      render json: { error: command.errors }, status: :unprocessable_entity
+    end
+  end
+
+  def get_drivers
+    render json: { data: Driver.all }, status: :ok
+  end
+
+  def get_customers
+    render json: { data: Customer.all }, status: :ok
+  end
+
+  def change_password
+
+  end
+
+  def get_trips
+    render json: { data: Trip.all }, status: :ok
+  end
+
+
+  
 
   def get_information
     render json: { data: "hi" }, status: :ok
@@ -9,15 +40,13 @@ class Api::AdminsController < ApplicationController
     command = AdminCommands::AdminAuthCommand.call(params[:username], params[:password])
     if command.success? && command.result
       cookies[:auth_token] = command.result[:refresh_token]
-      p command.result
       render json: {
         data: command.result,
         message: "You are logged in!"
       }, status: :ok
     else
-      render json: { error: command.errors }, status: :unauthorized
+      raise Errors::Unauthorized, "Invalid username or password"
     end
-
   end
 
   def logout
@@ -39,17 +68,12 @@ class Api::AdminsController < ApplicationController
 
   private
   def authenticate_admin
-    if auth_present?
-      p auth
-      if auth["type"] == "admin" && !in_blacklist?(token, "admin")
-        @current_admin = Admin.find_by(username: auth[:username])
-      else
-        render json: { error: "Unauthorized" }, status: :unauthorized
-      end
+    raise Errors::Unauthorized, "Unauthorized" unless cookies[:auth_token]
+    if auth["type"] == "admin" && !in_blacklist?(token, "admin")
+      @current_admin = Admin.find_by(username: auth[:username])
+      raise Errors::Unauthorized, "Unauthorized" unless @current_admin
     else
-      render json: { error: "Unauthorized" }, status: :unauthorized
+      raise Errors::Unauthorized, "Unauthorized"
     end
   end
-
-
 end

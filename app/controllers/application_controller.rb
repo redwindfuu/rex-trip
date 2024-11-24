@@ -1,13 +1,12 @@
+
+
 class ApplicationController < ActionController::API
   # include Response
   # include ExceptionHandler
   # include ActionController::MimeResponds
   include ActionController::Cookies
-  #
-  # # called before every action on controllers
-  # before_action :authorize_request
-  # attr_reader :current_user
-  #
+  include Api::ErrorHandler
+
   private
   def token
     request.env["HTTP_AUTHORIZATION"].scan(/Bearer (.*)$/).flatten.last
