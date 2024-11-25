@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_24_134303) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_25_080905) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -93,6 +93,21 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_24_134303) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "driver_balance_transactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "driver_id", null: false
+    t.decimal "amount", precision: 10, scale: 2
+    t.decimal "balance_after", precision: 10, scale: 2
+    t.integer "type"
+    t.integer "status"
+    t.uuid "approved_by_id"
+    t.datetime "approved_at"
+    t.datetime "requested_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["approved_by_id"], name: "index_driver_balance_transactions_on_approved_by_id"
+    t.index ["driver_id"], name: "index_driver_balance_transactions_on_driver_id"
+  end
+
   create_table "drivers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "full_name"
     t.string "email"
@@ -160,6 +175,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_24_134303) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "arrivals", "places"
   add_foreign_key "arrivals", "trips"
+  add_foreign_key "driver_balance_transactions", "admins", column: "approved_by_id"
+  add_foreign_key "driver_balance_transactions", "drivers"
   add_foreign_key "drivers", "admins", column: "kyc_by_id"
   add_foreign_key "trips", "customers"
   add_foreign_key "trips", "drivers"

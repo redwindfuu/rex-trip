@@ -1,16 +1,18 @@
 class Api::DocumentsController < ApplicationController
   def create
     document = Document.new(document_params)
-    if document.save
+    if document.save!
       data = {
         title: document.title,
-        link: handle_link(url_for(document.file).to_s),
+        link: url_for(document.file),
+        domain: ENV.fetch('DOMAIN', 'http://localhost:8000'),
+        path: rails_blob_path(document.file, only_path: true),
         created_at: document.created_at,
         id: document.id
       }
-      render json: { message: "File uploaded successfully", data: data  }, status: :created
+      render_json(data, status: :created)
     else
-      render json: { error: document.errors.full_messages }, status: :unprocessable_entity
+      raise Errors::Invalid, document.errors.full_messages
     end
   end
 
@@ -19,9 +21,9 @@ class Api::DocumentsController < ApplicationController
     p ENV["DOMAIN"]
     if document.file.attached?
       to_ = url_for(document.file)
-      render json: { link: ENV["DOMAIN"] }, status: :ok
+      redirect_to to_
     else
-      render json: { error: "File not found" }, status: :not_found
+      raise Errors::NotFound, "Document not found"
     end
   end
 

@@ -7,7 +7,7 @@ class Api::CustomersController < ApplicationController
   end
 
   def get_information
-    render json: { data: DriverSerializer.new(@current_customer) }, status: :ok
+    render json: { data: CustomerSerializer.new(@current_customer) }, status: :ok
   end
 
 

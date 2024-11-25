@@ -26,4 +26,15 @@ class ApplicationController < ActionController::API
     BlacklistedToken.find_by(token: auth_token, type: type)
   end
 
+  def is_auth?
+    raise Errors::Unauthorized, "Unauthorized" unless auth_present? && auth
+  end
+
+  def render_json(data, status: :ok, message: nil, meta: nil)
+    response = { data: data }
+    response[:message] = message if message
+    response[:meta] = meta if meta
+    render json: response, status: status
+  end
+
 end

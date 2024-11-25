@@ -10,6 +10,7 @@ module Api::ErrorHandler
     "Driggl::Authenticator::AuthorizationError" => "Errors::Unauthorized",
     "Pundit::NotAuthorizedError" => "Errors::Forbidden",
     "Errors::BadRequest" => "Errors::BadRequest",
+    "JWT::ExpiredSignature" => "Errors::Unauthorized",
   }
 
   included do

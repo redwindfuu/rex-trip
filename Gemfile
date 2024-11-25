@@ -48,7 +48,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 end
 
-
+gem 'will_paginate', '~> 4.0'
 
 gem "jwt", "~> 2.9"
 
