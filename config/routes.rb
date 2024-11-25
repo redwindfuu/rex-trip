@@ -25,12 +25,20 @@ Rails.application.routes.draw do
     resources :customers, only: [] do
       collection do
         get "trips/histories" => "customers#trip_histories"
+        post "login" => "customers#login"
+        post "logout" => "customers#logout"
+        post "refresh" => "customers#refresh_token"
+        get "me" => "customers#get_information"
       end
     end
 
     resources :drivers, only: [:create] do
       collection do
         get "trips/histories" => "drivers#trip_histories"
+        post "login" => "drivers#login"
+        post "logout" => "drivers#logout"
+        post "refresh" => "drivers#refresh_token"
+        get "me" => "drivers#get_information"
       end
     end
 

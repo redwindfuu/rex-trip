@@ -22,7 +22,7 @@ class ApplicationController < ActionController::API
     BlacklistedToken.create(token: auth_token, type: type)
   end
 
-  def in_blacklist?(auth_token , type)
+  def in_blacklist?(auth_token, type)
     BlacklistedToken.find_by(token: auth_token, type: type)
   end
 

@@ -9,7 +9,7 @@ class Api::AdminsController < ApplicationController
     if command.success?
       render json: { data: command.result }, status: :ok
     else
-      raise Errors::Invalid , "Review failed"
+      raise Errors::Invalid, "Review failed"
     end
   end
 
@@ -55,8 +55,7 @@ class Api::AdminsController < ApplicationController
     acc = token
     add_blacklist_token(acc, "admin")
     AuthCommands::RemoveRefreshTokenCommand.call(cookies[:auth_token], "admin")
-    json = { message: "You are logged out!" }
-    render json: json, status: :ok
+    render json: { message: "You are logged out!" }, status: :ok
   end
 
 
@@ -70,7 +69,7 @@ class Api::AdminsController < ApplicationController
 
   private
   def authenticate_admin
-    raise Errors::Unauthorized, "Unauthorized" unless cookies[:auth_token]
+    raise Errors::Unauthorized, "Unauthorized" unless auth_present?
     if auth["type"] == "admin" && !in_blacklist?(token, "admin")
       @current_admin = Admin.find_by(username: auth["user"][ "username" ])
       raise Errors::Unauthorized, "Unauthorized" unless @current_admin
