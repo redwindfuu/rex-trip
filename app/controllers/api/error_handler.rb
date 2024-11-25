@@ -8,7 +8,8 @@ module Api::ErrorHandler
     "ActiveRecord::RecordInvalid" => "Errors::Invalid",
     "Errors::ApplicationError" => "Errors::ApplicationError",
     "Driggl::Authenticator::AuthorizationError" => "Errors::Unauthorized",
-    "Pundit::NotAuthorizedError" => "Errors::Forbidden"
+    "Pundit::NotAuthorizedError" => "Errors::Forbidden",
+    "Errors::BadRequest" => "Errors::BadRequest",
   }
 
   included do
