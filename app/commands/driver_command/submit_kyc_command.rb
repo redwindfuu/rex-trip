@@ -5,7 +5,7 @@ module DriverCommand
     prepend SimpleCommand
 
     def initialize(driver, kyc_params)
-      @drive = driver
+      @driver = driver
       @kyc_params = kyc_params
     end
 
@@ -15,6 +15,7 @@ module DriverCommand
       driver.id_number = @kyc_params[:id_number]
       driver.front_side_link = @kyc_params[:front_side_link]
       driver.backside_link = @kyc_params[:backside_link]
+      driver.kyc_review = ""
       driver.kyc_at = Time.now.in_time_zone
       driver.status= Driver.statuses[:pending]
       driver.save!

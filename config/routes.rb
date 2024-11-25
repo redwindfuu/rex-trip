@@ -42,6 +42,7 @@ Rails.application.routes.draw do
         post "logout" => "drivers#logout"
         post "refresh" => "drivers#refresh_token"
         get "me" => "drivers#get_information"
+        post "kyc" => "drivers#submit_kyc"
       end
     end
 

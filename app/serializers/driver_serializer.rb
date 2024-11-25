@@ -24,13 +24,14 @@ class DriverSerializer < ActiveModel::Serializer
 
   def detail_option
     kyc_by_admin = Admin.find(object.kyc_by_id) if object.kyc_by_id
+    domain = ENV.fetch('DOMAIN', 'http://localhost:8000')
     {
       kyc_by: kyc_by_admin&.username,
       kyc_review: object.kyc_review,
       kyc_at: object.kyc_at,
       id_number: object.id_number,
-      front_side_link: object.front_side_link,
-      backside_link: object.backside_link,
+      front_side_link: domain + object.front_side_link,
+      backside_link: domain + object.backside_link,
       balance: object.balance
     }
   end

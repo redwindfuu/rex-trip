@@ -24,9 +24,9 @@ class Api::AdminsController < ApplicationController
   end
 
   def review_kyc
-    command = AdminCommands::ReviewKycCommand.call(@current_admin, params[:driver_id], params[:status], params[:review])
+    command = AdminCommands::ReviewKycCommand.call(@current_admin, params[:driver_id], params[:status], params[:kyc_review])
     if command.success?
-      render json: { data: command.result }, status: :ok
+      render json: { message: "Review successful", data: nil }, status: :ok
     else
       raise Errors::Invalid, "Review failed"
     end
