@@ -48,7 +48,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 end
 
-gem 'will_paginate', '~> 4.0'
+# gem 'will_paginate', '~> 4.0'
 
 gem "jwt", "~> 2.9"
 
@@ -61,3 +61,7 @@ gem "uuid7", "~> 0.2.0"
 gem "params_checker", git: "git@github.com:Rexy-Technology/params-checker.git", branch: "0.2"
 
 gem "rexy_admin", git: "git@github.com:Rexy-Technology/rexy-admin.git", branch: "0.4"
+
+gem "faker"
+
+gem 'kaminari', '~> 1.2.1'

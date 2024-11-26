@@ -14,7 +14,7 @@ class Api::DriversController < ApplicationController
   end
 
   def login
-    command = DriverCommand::DriverAuthCommand.call(params[:username], params[:password])
+    command = DriverCommands::DriverAuthCommand.call(params[:username], params[:password])
     if command.success? && command.result
       cookies[:auth_token] = command.result[:refresh_token]
       render json: {
@@ -42,6 +42,13 @@ class Api::DriversController < ApplicationController
   end
 
   def create
+
+    validator = DriverValidator::CreateDriverValidator.call(params: driver_params)
+
+    if validator.failure?
+      raise Errors::Invalid, validator.errors
+    end
+
     driver = Driver.new(driver_params)
     if driver.save
       render_json(DriverSerializer.new(driver, show_more_info: "detail"), status: :created, message: "Driver created successfully")
@@ -51,13 +58,37 @@ class Api::DriversController < ApplicationController
   end
 
   def submit_kyc
-    cmd = DriverCommand::SubmitKycCommand.call(@current_driver, kyc_param)
+    cmd = DriverCommands::SubmitKycCommand.call(@current_driver, kyc_param)
     if cmd.success?
       render_json(cmd.result, status: :ok, message: "KYC submitted successfully")
     else
       raise Errors::ApplicationError, cmd.errors
     end
   end
+
+  def approve_trip
+
+  end
+
+
+  def finish_trip
+
+  end
+
+  def current_trip
+
+  end
+
+  def payment
+
+  end
+
+  def request_transaction
+
+  end
+
+
+
 
 
   # private methods below

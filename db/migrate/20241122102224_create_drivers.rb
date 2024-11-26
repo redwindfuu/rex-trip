@@ -1,6 +1,7 @@
 class CreateDrivers < ActiveRecord::Migration[7.0]
   def change
-    create_table :drivers, id: :uuid do |t|
+    create_table :drivers do |t|
+      t.uuid :uuid, default: -> { "uuid_generate_v4()" }, null: false
       t.string :full_name
       t.string :email
       t.string :phone
@@ -18,7 +19,7 @@ class CreateDrivers < ActiveRecord::Migration[7.0]
       t.column :status, :integer, default: 0
       t.datetime :kyc_at
 
-      t.references :kyc_by, foreign_key: { to_table: :admins }, type: :uuid
+      t.references :kyc_by, foreign_key: { to_table: :admins }
 
       t.timestamps
     end

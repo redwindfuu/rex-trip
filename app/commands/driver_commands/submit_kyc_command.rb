@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module DriverCommand
+module DriverCommands
   class SubmitKycCommand
     prepend SimpleCommand
 

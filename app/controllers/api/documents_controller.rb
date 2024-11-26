@@ -18,7 +18,6 @@ class Api::DocumentsController < ApplicationController
 
   def show
     document = Document.find(params[:id])
-    p ENV["DOMAIN"]
     if document.file.attached?
       to_ = url_for(document.file)
       redirect_to to_

@@ -11,33 +11,60 @@
 
 # Create a default admin user
 
-admin = Admin.find_or_create_by!(username: 'admin') do |user|
-  user.password= '12345678'
-  user.password_confirmation= '12345678'
-  user.role= 'super_admin'
-  user.save!
+# admin = Admin.find_or_create_by!(username: 'admin') do |user|
+#   user.password= '12345678'
+#   user.password_confirmation= '12345678'
+#   user.role= 'super_admin'
+#   user.save!
+# end
+# #
+# # # Create a default customer user
+# if Customer.count == 0
+#   10.times do |i|
+#     customer = Customer.new
+#     customer.phone= Faker::PhoneNumber.cell_phone
+#     customer.email = Faker::Internet.email
+#     customer.full_name = Faker::Name.name
+#     customer.username = Faker::Internet.username
+#     customer.password = '12345678'
+#     customer.password_confirmation = '12345678'
+#     customer.avatar_link= Faker::Avatar.image
+#     customer.save!
+#   end
+# end
+#
+# # # Create a default driver user
+if Driver.count == 1
+  10.times do |i|
+    driver = Driver.new
+    driver.phone= Faker::PhoneNumber.cell_phone
+    driver.email = Faker::Internet.email
+    driver.full_name = Faker::Name.name
+    driver.username = Faker::Internet.username
+    driver.password = '12345678'
+    driver.password_confirmation = '12345678'
+    driver.avatar_link= Faker::Avatar.image
+    driver.save!
+  end
 end
-
-# Create a default customer user
-if Customer.count == 0
-  customer = Customer.new
-  customer.phone= '1234567890'
-  customer.email = 'mail@gmail.com'
-  customer.full_name = 'John Doe'
-  customer.username = 'johndoe'
-  customer.password = '12345678'
-  customer.password_confirmation = '12345678'
-  customer.save!
-end
-
-# Create a default driver user
-if Driver.count == 0
-  driver = Driver.new
-  driver.phone= '1234567890'
-  driver.email = 'drivermail@gmail.com'
-  driver.full_name = 'Driver Doe'
-  driver.username = 'driverdoe'
-  driver.password = '12345678'
-  driver.password_confirmation = '12345678'
-  driver.save!
-end
+#
+# # Create places
+# if Place.count == 0
+#   10.times do |i|
+#     Place.create(name: "#{Faker::Address.city} #{Faker::Address.full_address}")
+#   end
+#
+#   # create PlaceExpense
+#   places = Place.all
+#   length = places.length
+#
+#   for i in 0..length-2
+#     for j in i+1..length-1
+#       PlaceExpense.create(from_place_id: places[i].id, to_place_id: places[j].id, price: rand(1..10) * 1000)
+#     end
+#   end
+#
+#
+#
+#
+# end

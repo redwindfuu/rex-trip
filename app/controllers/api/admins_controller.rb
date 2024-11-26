@@ -6,12 +6,12 @@ class Api::AdminsController < ApplicationController
 
   def transactions
       begin
-      page = params[:page] || 1
-      per_page = params[:per_page] || 10
-      transactions = Transaction.paginate(page: page, per_page: per_page)
-      render_json(ActiveModelSerializers::SerializableResource.new(transactions, each_serializer: TransactionSerializer),
+      transactions = DriverBalanceTransaction.all
+      render_json(ActiveModelSerializers::SerializableResource.new(
+          transactions.page(pagination[:page]).per(pagination[:per_page]),
+          each_serializer: TransactionSerializer),
                   status: :ok,
-                  meta: { total: transactions.total_entries },
+                  meta: { total: transactions.length },
                   message: "Transactions fetched successfully"
       )
     rescue Exception => e
@@ -34,12 +34,12 @@ class Api::AdminsController < ApplicationController
 
   def get_drivers
     begin
-      page = params[:page] || 1
-      per_page = params[:per_page] || 10
-      drivers = Driver.paginate(page: page, per_page: per_page)
-      render_json(ActiveModelSerializers::SerializableResource.new(drivers, each_serializer: DriverSerializer, show_more_info: "detail"),
+      drivers = Driver.all
+      render_json(ActiveModelSerializers::SerializableResource.new(
+          drivers.page(pagination[:page]).per(pagination[:per_page]),
+          each_serializer: DriverSerializer, show_more_info: "detail"),
                   status: :ok,
-                  meta: { total: drivers.total_entries },
+                  meta: { total: drivers.length },
                   message: "Drivers fetched successfully"
       )
     rescue Exception => e
@@ -56,12 +56,12 @@ class Api::AdminsController < ApplicationController
 
   def get_customers
     begin
-      page = params[:page] || 1
-      per_page = params[:per_page] || 10
-      customers = Customer.paginate(page: page, per_page: per_page)
-      render_json(ActiveModelSerializers::SerializableResource.new(customers, each_serializer: CustomerSerializer),
+      customers = Customer.all
+      render_json(ActiveModelSerializers::SerializableResource.new(
+        customers.page(pagination[:page]).per(pagination[:per_page]),
+        each_serializer: CustomerSerializer),
                   status: :ok,
-                  meta: { total: customers.total_entries },
+                  meta: { total: customers.length },
                   message: "Customers fetched successfully"
       )
     rescue Exception => e
@@ -80,12 +80,12 @@ class Api::AdminsController < ApplicationController
 
   def get_trips
     begin
-      page = params[:page] || 1
-      per_page = params[:per_page] || 10
-      trips = Trip.paginate(page: page, per_page: per_page)
-      render_json(ActiveModelSerializers::SerializableResource.new(trips, each_serializer: TripSerializer),
+      trips = Trip.all
+      render_json(ActiveModelSerializers::SerializableResource.new(
+        trips.page(pagination[:page]).per(pagination[:per_page]),
+        each_serializer: TripSerializer),
                   status: :ok,
-                  meta: { total: trips.total_entries },
+                  meta: { total: trips.length },
                   message: "Trips fetched successfully"
       )
     rescue Exception => e

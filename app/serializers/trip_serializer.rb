@@ -1,4 +1,8 @@
 # frozen_string_literal: true
 
-class TripSerializer
+class TripSerializer < ActiveModel::Serializer
+
+
+
+
 end
