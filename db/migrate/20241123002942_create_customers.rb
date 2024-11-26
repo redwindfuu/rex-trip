@@ -1,6 +1,7 @@
 class CreateCustomers < ActiveRecord::Migration[7.0]
   def change
-    create_table :customers, id: :uuid do |t|
+    create_table :customers do |t|
+      t.uuid :uuid, default: -> { "uuid_generate_v4()" }, null: false
       t.string :full_name
       t.string :email
       t.string :phone

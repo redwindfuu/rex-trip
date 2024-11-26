@@ -3,6 +3,14 @@ class Document < ApplicationRecord
 
   validate :acceptable_file
 
+  def file_filename
+    "#{self.id}_#{Time.now.to_i}"
+  end
+
+  def attach_file(file_input)
+    self.file.attach(io: file_input, filename: file_filename)
+  end
+
   def acceptable_file
     return unless file.attached?
 

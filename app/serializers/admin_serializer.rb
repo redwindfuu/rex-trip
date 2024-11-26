@@ -1,5 +1,5 @@
 class AdminSerializer < ActiveModel::Serializer
-  attributes :id, :username, :role , :created_at
+  attributes :id, :uuid, :username, :role , :created_at
 end
 
 
