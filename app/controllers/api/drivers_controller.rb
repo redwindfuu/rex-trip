@@ -1,18 +1,20 @@
 class Api::DriversController < ApplicationController
   before_action :authenticate_driver
-  skip_before_action :authenticate_driver, only: [ :login, :refresh_token, :create ]
+  skip_before_action :authenticate_driver, only: [:login, :refresh_token, :create]
 
   def trip_histories
-    render json: { data: Trip.where(driver_id: @current_driver.id) }, status: :ok
+    render_json(ActiveModelSerializers::SerializableResource.new(@current_driver.trips, each_serializer: TripSerializer),
+                status: :ok,
+                message: "Trips fetched successfully"
+    )
   end
 
   def get_information
-    render json: { data: DriverSerializer.new(@current_driver) }, status: :ok
+    render_json(DriverSerializer.new(@current_driver, show_more_info: "detail"), status: :ok, message: "Driver fetched successfully")
   end
 
-
   def login
-    command = DriverCommand::DriverAuthCommand.call(params[:username], params[:password])
+    command = DriverCommands::DriverAuthCommand.call(params[:username], params[:password])
     if command.success? && command.result
       cookies[:auth_token] = command.result[:refresh_token]
       render json: {
@@ -31,7 +33,6 @@ class Api::DriversController < ApplicationController
     render json: { message: "You are logged out!" }, status: :ok
   end
 
-
   def refresh_token
     cmd = AuthCommands::CheckRefreshTokenCommand.call(cookies[:auth_token], "driver")
     if cmd.success?
@@ -40,29 +41,72 @@ class Api::DriversController < ApplicationController
     end
   end
 
-
   def create
+
+    validator = DriverValidator::CreateDriverValidator.call(params: driver_params)
+
+    if validator.failure?
+      raise Errors::Invalid, validator.errors
+    end
+
     driver = Driver.new(driver_params)
     if driver.save
-      render json: { message: :"ok"}, status: :created
+      render_json(DriverSerializer.new(driver, show_more_info: "detail"), status: :created, message: "Driver created successfully")
     else
-      render json: driver.errors, status: :unprocessable_entity
+      raise Errors::ApplicationError, driver.errors.full_messages
     end
   end
 
+  def submit_kyc
+    cmd = DriverCommands::SubmitKycCommand.call(@current_driver, kyc_param)
+    if cmd.success?
+      render_json(cmd.result, status: :ok, message: "KYC submitted successfully")
+    else
+      raise Errors::ApplicationError, cmd.errors
+    end
+  end
+
+  def approve_trip
+
+  end
+
+
+  def finish_trip
+
+  end
+
+  def current_trip
+
+  end
+
+  def payment
+
+  end
+
+  def request_transaction
+
+  end
+
+
+
+
+
+  # private methods below
   private
+
   def driver_params
     params.require(:driver)
           .permit(
             :email,
-                  :password,
-                  :password_confirmation,
-                  :full_name,
-                  :phone,
-                  :avatar_link,
-                  :username
+            :password,
+            :password_confirmation,
+            :full_name,
+            :phone,
+            :avatar_link,
+            :username
           )
   end
+
 
   def authenticate_driver
     raise Errors::Unauthorized, "Unauthorized" unless auth_present?
@@ -72,6 +116,14 @@ class Api::DriversController < ApplicationController
     else
       raise Errors::Unauthorized, "Unauthorized"
     end
+  end
+
+  def kyc_param
+    params.permit(
+            :id_number,
+            :front_side_link,
+            :backside_link
+          )
   end
 
 end

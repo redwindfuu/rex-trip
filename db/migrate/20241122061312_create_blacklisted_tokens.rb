@@ -1,4 +1,4 @@
-class CreateBlacklistedTokens < ActiveRecord::Migration[8.0]
+class CreateBlacklistedTokens < ActiveRecord::Migration[7.0]
   def change
     create_table :blacklisted_tokens do |t|
       t.uuid :uuid

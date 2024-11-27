@@ -7,11 +7,22 @@ class Api::CustomersController < ApplicationController
   end
 
   def get_information
-    render json: { data: DriverSerializer.new(@current_customer) }, status: :ok
+    render json: { data: CustomerSerializer.new(@current_customer) }, status: :ok
+  end
+
+
+  def request_trip
+
   end
 
 
   def create
+    validator = CustomerValidator::CreateCustomerValidator.call(params: create_customer_params)
+
+    if validator.failure?
+      raise Errors::Invalid, message: "Invalid input"
+    end
+
     customer = Customer.new(create_customer_params)
     if customer.save!
       render json: { message: "Customer created successfully" }, status: :created
@@ -74,4 +85,6 @@ class Api::CustomersController < ApplicationController
                   :username
           )
   end
+
+
 end

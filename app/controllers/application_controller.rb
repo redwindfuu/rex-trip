@@ -1,4 +1,4 @@
-
+require 'params_checker'
 
 class ApplicationController < ActionController::API
   # include Response
@@ -24,6 +24,23 @@ class ApplicationController < ActionController::API
 
   def in_blacklist?(auth_token, type)
     BlacklistedToken.find_by(token: auth_token, type: type)
+  end
+
+  def is_auth?
+    raise Errors::Unauthorized, "Unauthorized" unless auth_present? && auth
+  end
+
+  def render_json(data, status: :ok, message: nil, meta: nil)
+    response = { data: data }
+    response[:message] = message if message
+    response[:meta] = meta if meta
+    render json: response, status: status
+  end
+
+  def pagination
+    page = params[:page] || 1
+    per_page = params[:per_page] || 10
+    { page: page, per_page: per_page }
   end
 
 end

@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_24_134303) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_26_215750) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
 
   create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
@@ -43,7 +44,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_24_134303) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "admins", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "admins", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.string "username"
     t.string "password_digest"
     t.string "role"
@@ -54,7 +56,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_24_134303) do
   create_table "arrivals", force: :cascade do |t|
     t.string "name"
     t.bigint "place_id"
-    t.uuid "trip_id"
+    t.bigint "trip_id"
     t.integer "order_place"
     t.datetime "end_time_est"
     t.datetime "end_time_real"
@@ -74,7 +76,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_24_134303) do
     t.index ["token"], name: "index_blacklisted_tokens_on_token", unique: true
   end
 
-  create_table "customers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "customers", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
     t.string "full_name"
     t.string "email"
     t.string "phone"
@@ -93,7 +96,24 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_24_134303) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "drivers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "driver_balance_transactions", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.bigint "driver_id", null: false
+    t.decimal "amount", precision: 10, scale: 2
+    t.decimal "balance_after", precision: 10, scale: 2
+    t.integer "type"
+    t.integer "status"
+    t.bigint "approved_by_id"
+    t.datetime "approved_at"
+    t.datetime "requested_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["approved_by_id"], name: "index_driver_balance_transactions_on_approved_by_id"
+    t.index ["driver_id"], name: "index_driver_balance_transactions_on_driver_id"
+  end
+
+  create_table "drivers", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
     t.string "full_name"
     t.string "email"
     t.string "phone"
@@ -110,11 +130,35 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_24_134303) do
     t.string "invite_code"
     t.integer "status", default: 0
     t.datetime "kyc_at"
-    t.uuid "kyc_by_id"
+    t.bigint "kyc_by_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "kyc_review"
     t.index ["kyc_by_id"], name: "index_drivers_on_kyc_by_id"
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.bigint "trip_id", null: false
+    t.decimal "amount", precision: 10, scale: 2
+    t.datetime "time_event"
+    t.integer "method", default: 0
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["trip_id"], name: "index_payments_on_trip_id"
+    t.index ["uuid"], name: "index_payments_on_uuid"
+  end
+
+  create_table "place_expenses", force: :cascade do |t|
+    t.bigint "from_place_id", null: false
+    t.bigint "to_place_id", null: false
+    t.decimal "price", precision: 10, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "time_of_expense"
+    t.index ["from_place_id"], name: "index_place_expenses_on_from_place_id"
+    t.index ["to_place_id"], name: "index_place_expenses_on_to_place_id"
   end
 
   create_table "places", force: :cascade do |t|
@@ -132,10 +176,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_24_134303) do
     t.index ["crypted_token"], name: "index_refresh_tokens_on_crypted_token", unique: true
   end
 
-  create_table "trips", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "trips", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.string "fight_no"
-    t.uuid "driver_id"
-    t.uuid "customer_id"
+    t.bigint "driver_id"
+    t.bigint "customer_id"
     t.bigint "depart_place_id"
     t.datetime "booking_time"
     t.integer "seat"
@@ -160,7 +205,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_24_134303) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "arrivals", "places"
   add_foreign_key "arrivals", "trips"
+  add_foreign_key "driver_balance_transactions", "admins", column: "approved_by_id"
+  add_foreign_key "driver_balance_transactions", "drivers"
   add_foreign_key "drivers", "admins", column: "kyc_by_id"
+  add_foreign_key "payments", "trips"
+  add_foreign_key "place_expenses", "places", column: "from_place_id"
+  add_foreign_key "place_expenses", "places", column: "to_place_id"
   add_foreign_key "trips", "customers"
   add_foreign_key "trips", "drivers"
   add_foreign_key "trips", "places", column: "depart_place_id"

@@ -1,6 +1,6 @@
 class Customer < ApplicationRecord
   has_secure_password
-
+  validates :username, presence: true, uniqueness: true
   has_many :trips
 
   before_create :preprocess_create

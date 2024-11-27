@@ -11,18 +11,21 @@ Rails.application.routes.draw do
         get "me" => "admins#get_information"
         get "trips" => "admins#get_trips"
         get "drivers" => "admins#get_drivers"
+        get "drivers/:id" => "admins#get_driver"
         put "drivers/:driver_id/kyc-review" => "admins#review_kyc"
+        get "driver/transactions" => "admins#driver_transactions"
+        put "driver/transactions/:id" => "admins#update_transaction"
         get "customers" => "admins#get_customers"
       end
     end
 
-    resources :trips, only: [:index]
-
-    resource :places, only: [] do
+    resources :trips, only: [ :index , :create, :show, :update, :destroy ] do
 
     end
 
-    resources :customers, only: [] do
+    resources :places, only: [ :index, :show]
+
+    resources :customers, only: [ :create ] do
       collection do
         get "trips/histories" => "customers#trip_histories"
         post "login" => "customers#login"
@@ -32,17 +35,18 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :drivers, only: [:create] do
+    resources :drivers, only: [ :create ] do
       collection do
         get "trips/histories" => "drivers#trip_histories"
         post "login" => "drivers#login"
         post "logout" => "drivers#logout"
         post "refresh" => "drivers#refresh_token"
         get "me" => "drivers#get_information"
+        post "kyc" => "drivers#submit_kyc"
       end
     end
 
-    resources :documents, only: [:create, :show]
+    resources :documents, only: [ :create, :show ]
 
     resources :systems, only: [] do
 
