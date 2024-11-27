@@ -19,8 +19,11 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :trips, only: [ :index , :create, :show, :update, :destroy ] do
-
+    resources :trips, only: [ :index, :create, :update, :destroy ] do
+      collection do
+        get "available" => "trips#trip_available"
+        # get ":id" => "trips#show"
+      end
     end
 
     resources :places, only: [ :index, :show]
@@ -28,6 +31,8 @@ Rails.application.routes.draw do
     resources :customers, only: [ :create ] do
       collection do
         get "trips/histories" => "customers#trip_histories"
+        post "trips/request" => "customers#request_trip"
+        post "trips/:trip_id/rate" => "customers#rate_trip"
         post "login" => "customers#login"
         post "logout" => "customers#logout"
         post "refresh" => "customers#refresh_token"
@@ -38,6 +43,11 @@ Rails.application.routes.draw do
     resources :drivers, only: [ :create ] do
       collection do
         get "trips/histories" => "drivers#trip_histories"
+        get "trips/available" => "drivers#available_trips"
+        post "trips/:trip_id/approve" => "drivers#approve_trip"
+        put "trips/:trip_id/change-status" => "drivers#change_trip_status"
+        put "trips/:trip_id/payment" => "drivers#payment"
+
         post "login" => "drivers#login"
         post "logout" => "drivers#logout"
         post "refresh" => "drivers#refresh_token"

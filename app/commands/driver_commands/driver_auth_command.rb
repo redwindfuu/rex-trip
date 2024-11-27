@@ -17,12 +17,13 @@ module DriverCommands
         user_data = {
           user: {
             id: user[:id],
-            username: user[:username]
+            username: user[:username],
+            uuid: user[:uuid]
           },
           type: "driver"
         }
         access_token = Auth.issue(user_data)
-        refresh_token = AuthCommands::AddRefreshTokenCommand.call(user[:id], "driver")
+        refresh_token = AuthCommands::AddRefreshTokenCommand.call(user[:uuid], "driver")
         return { access_token: access_token, user: DriverSerializer.new(user), refresh_token: refresh_token.result }
       else
         errors.add(:base, "Invalid username or password")

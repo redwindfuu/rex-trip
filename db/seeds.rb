@@ -68,3 +68,10 @@ end
 #
 #
 # end
+
+expenses = PlaceExpense.all
+
+expenses.each do |expense|
+  expense.time_of_expense = rand(1..100) * 1000
+  expense.save!
+end

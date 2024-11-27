@@ -18,11 +18,11 @@ module AuthCommands
         user = nil
         case @type
         when "admin"
-          user = Admin.find_by(id: @refresh_token_data[:uuid])
+          user = Admin.find_by(uuid: @refresh_token_data[:uuid])
         when "customer"
-          user = Customer.find_by(id: @refresh_token_data[:uuid])
+          user = Customer.find_by(uuid: @refresh_token_data[:uuid])
         when "driver"
-          user = Driver.find_by(id: @refresh_token_data[:uuid])
+          user = Driver.find_by(uuid: @refresh_token_data[:uuid])
         else
           # add Customer model and Driver model
         end
@@ -35,7 +35,7 @@ module AuthCommands
             type: @type
           }
           access_token = Auth.issue(payload)
-          refresh_token = AuthCommands::AddRefreshTokenCommand.call(user.id, @type)
+          refresh_token = AuthCommands::AddRefreshTokenCommand.call(user.uuid, @type)
           @refresh_token_data.destroy
           { access_token: access_token, user: {
             id: user.id,

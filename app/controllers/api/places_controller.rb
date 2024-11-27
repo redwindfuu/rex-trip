@@ -22,10 +22,6 @@ class Api::PlacesController < ApplicationController
   end
 
 
-
-
-
-
   private
   def place_params
     params.require(:place).permit(:name)
