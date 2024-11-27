@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_26_020420) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_26_215750) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -137,12 +137,26 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_26_020420) do
     t.index ["kyc_by_id"], name: "index_drivers_on_kyc_by_id"
   end
 
+  create_table "payments", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.bigint "trip_id", null: false
+    t.decimal "amount", precision: 10, scale: 2
+    t.datetime "time_event"
+    t.integer "method", default: 0
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["trip_id"], name: "index_payments_on_trip_id"
+    t.index ["uuid"], name: "index_payments_on_uuid"
+  end
+
   create_table "place_expenses", force: :cascade do |t|
     t.bigint "from_place_id", null: false
     t.bigint "to_place_id", null: false
     t.decimal "price", precision: 10, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "time_of_expense"
     t.index ["from_place_id"], name: "index_place_expenses_on_from_place_id"
     t.index ["to_place_id"], name: "index_place_expenses_on_to_place_id"
   end
@@ -194,6 +208,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_26_020420) do
   add_foreign_key "driver_balance_transactions", "admins", column: "approved_by_id"
   add_foreign_key "driver_balance_transactions", "drivers"
   add_foreign_key "drivers", "admins", column: "kyc_by_id"
+  add_foreign_key "payments", "trips"
   add_foreign_key "place_expenses", "places", column: "from_place_id"
   add_foreign_key "place_expenses", "places", column: "to_place_id"
   add_foreign_key "trips", "customers"

@@ -16,8 +16,10 @@ module TripValidator
       froms.each do |from|
         from_place_id = from[:from_place_id]
         order = from[:order]
+        name = from[:name]
         raise_error("from_place_id is required") if from_place_id.nil?
         raise_error("order is required") if order.nil?
+        raise_error("name is required") if name.nil?
         raise_error("order must be a number") unless order.is_a?(Integer)
       end
     end
