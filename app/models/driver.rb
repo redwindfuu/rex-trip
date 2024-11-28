@@ -48,7 +48,7 @@ class Driver < ApplicationRecord
     self.invite_code = SecureRandom.hex(15)
     self.rating_avg = 3.0
     self.balance = 0
-    self.is_available= true
+    self.is_available= false
     self.amount_invite = 0
   end
 end

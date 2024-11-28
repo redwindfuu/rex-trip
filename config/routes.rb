@@ -11,12 +11,13 @@ Rails.application.routes.draw do
         get "me" => "admins#get_information"
         get "trips" => "admins#get_trips"
         get "drivers" => "admins#get_drivers"
+        get "drivers/transactions" => "admins#transactions"
         get "drivers/:id" => "admins#get_driver"
         put "drivers/:driver_id/kyc-review" => "admins#review_kyc"
-        get "driver/transactions" => "admins#transactions"
-        put "driver/transactions/:transaction_id" => "admins#update_transaction"
+        put "drivers/transactions/:transaction_id" => "admins#update_transaction"
 
         get "customers" => "admins#get_customers"
+        get "customers/:id" => "admins#get_customer"
       end
     end
 
@@ -47,6 +48,7 @@ Rails.application.routes.draw do
       collection do
         get "trips/histories" => "drivers#trip_histories"
         get "trips/available" => "drivers#available_trips"
+        get "trips/current" => "drivers#current_trip"
         post "trips/:trip_id/approve" => "drivers#approve_trip"
         put "trips/:trip_id/change-status" => "drivers#change_trip_status"
         put "trips/:trip_id/payment" => "drivers#payment"

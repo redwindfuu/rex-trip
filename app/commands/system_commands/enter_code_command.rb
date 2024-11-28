@@ -3,12 +3,12 @@
 module SystemCommands
   class EnterCodeCommand
     prepend SimpleCommand
-    attr_accessor :code, :from_uuid, :type
+    attr_accessor :code, :from_uuid, :begin_type
 
-    def initialize( from_uuid, code, type)
+    def initialize(from_uuid, code, begin_type)
       @from_uuid = from_uuid
       @code = code
-      @type = type
+      @begin_type = begin_type
     end
 
     # CC : Customer to Customer
@@ -19,30 +19,43 @@ module SystemCommands
       cmd = SystemValidator::EnterCodeValidator.call(params: {
         code: code,
         from_uuid: from_uuid,
-        type: type
+        type: begin_type
       })
 
       if cmd.failure?
         errors.add(:error, cmd.errors)
         return
       end
+      type , inviter = get_type_from_code(begin_type, code)
 
-      is_invited = InvitedFriend.find_by(from_uuid: from_uuid).first
+      is_invited = InvitedFriend.find_by(from_uuid: from_uuid)
       if is_invited
         errors.add(:error, "You have already invited by another user")
         return
       end
 
-      inviter = (type[0] == "C") ?
-                  Customer.find_by(amount_invite: code).first :
-                  Driver.find_by(amount_invite: code).first
-
-      if inviter.nil? || inviter.uuid == from_uuid
+      if inviter.nil? || inviter[:uuid] == from_uuid
         errors.add(:error, "Code is invalid")
         return
       end
-
-      InvitedFriend.create!(from_uuid: from_uuid, to_uuid: inviter.uuid, type: InvitedFriend.types[type.to_sym])
+      InvitedFriend.transaction do
+        inviter.increment!(:amount_invite)
+        InvitedFriend.create!(from_uuid: from_uuid, to_uuid: inviter.uuid, invite_type: InvitedFriend.invite_types[type.to_sym], invite_code: code)
+      end
     end
+
+    def get_type_from_code(type, code)
+      customer = Customer.find_by(invite_code: code)
+
+      return "C" + type , customer if customer
+
+      driver = Driver.find_by(invite_code: code)
+
+      return ["D" + type, driver] if driver
+
+      [nil, nil]
+    end
+
   end
 end
+

@@ -31,6 +31,7 @@ module AuthCommands
             user: {
               id: user.id,
               username: user.username,
+              uuid: user.uuid
             },
             type: @type
           }

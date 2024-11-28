@@ -2,7 +2,7 @@
 
 module SystemValidator
   class EnterCodeValidator < ParamsChecker::BaseParamsChecker
-    TYPES_INVITE = [ :CC , :CD, :DD , :DC ]
+    TYPES_INVITE = [ :C, :D ]
     def schema
       {
         code: char_field,

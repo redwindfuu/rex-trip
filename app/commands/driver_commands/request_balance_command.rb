@@ -32,17 +32,18 @@ module DriverCommands
         return
       end
 
-      if type == :withdrawn && driver.balance < amount
+      if type.to_sym == :withdrawn && driver.balance < amount
         errors.add(:error, "Balance is not enough")
         return
       end
+      convert_amount = BigDecimal("-1") * BigDecimal(amount) if type.to_sym == :withdrawn
 
       ActiveRecord::Base.transaction do
         DriverBalanceTransaction.create_transaction(
           driver.id,
-          amount,
-          driver.balance + amount,
-          DriverBalanceTransaction.types[type]
+          convert_amount,
+          driver.balance + convert_amount,
+          DriverBalanceTransaction.transaction_types[type.to_sym]
         )
       end
 

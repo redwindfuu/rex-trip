@@ -39,7 +39,7 @@ class Api::AdminsController < ApplicationController
 
   def get_drivers
     begin
-      drivers = Driver.all
+      drivers = Driver.all.order("updated_at DESC")
       render_json(ActiveModelSerializers::SerializableResource.new(
           drivers.page(pagination[:page]).per(pagination[:per_page]),
           each_serializer: DriverSerializer, show_more_info: "detail"),
@@ -69,6 +69,16 @@ class Api::AdminsController < ApplicationController
                   meta: { total: customers.length },
                   message: "Customers fetched successfully"
       )
+    rescue Exception => e
+      raise Errors::ApplicationError, e.message
+    end
+    end
+
+
+  def get_customer
+    begin
+      customer = Customer.find(params[:id])
+      render_json(CustomerSerializer.new(customer), status: :ok, message: "Customer fetched successfully")
     rescue Exception => e
       raise Errors::ApplicationError, e.message
     end
@@ -105,7 +115,7 @@ class Api::AdminsController < ApplicationController
   def login
     command = AdminCommands::AdminAuthCommand.call(params[:username], params[:password])
     if command.success? && command.result
-      cookies[:auth_token] = command.result[:refresh_token]
+      cookies[:auth_token_admin] = command.result[:refresh_token]
       render_json(command.result, status: :ok, message: "Login successful")
     else
       raise Errors::Unauthorized, "Invalid username or password"
@@ -115,12 +125,12 @@ class Api::AdminsController < ApplicationController
   def logout
     acc = token
     add_blacklist_token(acc, "admin")
-    AuthCommands::RemoveRefreshTokenCommand.call(cookies[:auth_token], "admin")
+    AuthCommands::RemoveRefreshTokenCommand.call(cookies[:auth_token_admin], "admin")
     render json: { message: "You are logged out!" }, status: :ok
   end
 
   def refresh_token
-    cmd = AuthCommands::CheckRefreshTokenCommand.call(cookies[:auth_token], "admin")
+    cmd = AuthCommands::CheckRefreshTokenCommand.call(cookies[:auth_token_admin], "admin")
     if cmd.success?
       cookies[:auth_token] = cmd.result[:refresh_token]
       render json: { data: cmd.result }, status: :ok
