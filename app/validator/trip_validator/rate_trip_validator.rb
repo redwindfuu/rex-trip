@@ -5,7 +5,8 @@ module TripValidator
     def schema
       {
         trip_id: int_field,
-        rating: int_field
+        rating: int_field,
+        customer_id: int_field
       }
     end
 

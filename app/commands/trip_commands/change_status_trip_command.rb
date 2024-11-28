@@ -56,7 +56,7 @@ module TripCommands
           driver.id,
           -trip.fee,
           driver.balance,
-          DriverBalanceTransaction.types[:trip_fee]
+          DriverBalanceTransaction.transaction_types[:trip_fee]
         )
 
       end

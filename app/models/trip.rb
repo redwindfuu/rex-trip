@@ -12,7 +12,6 @@ class Trip < ApplicationRecord
 
 
   validates :seat, presence: true, numericality: { greater_than: 0 }
-  validates :total_price, presence: true, numericality: { greater_than: 0 }, allow_nil: false
 
   before_create :before_request
 

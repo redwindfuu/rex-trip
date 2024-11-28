@@ -42,6 +42,7 @@ module TripCommands
       ActiveRecord::Base.transaction do
         trip = Trip.create(customer_id: customer_id, depart_place_id: trip_params[:to_place_id], seat: trip_params[:seat], trip_status: Trip.trip_statuses[:WAITING_DRIVER_APPROVE], fee_rate: FEE_RATE)
         trip.start_time_est = Time.now + 5.minutes
+
         trip.save!
         arrive_list.each do |arrive|
           fee_price += arrive[:price]

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_27_091441) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_28_045059) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -101,8 +101,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_27_091441) do
     t.bigint "driver_id", null: false
     t.decimal "amount", precision: 10, scale: 2
     t.decimal "balance_after", precision: 10, scale: 2
-    t.integer "type"
-    t.integer "status"
+    t.integer "transaction_type"
+    t.integer "transaction_status"
     t.bigint "approved_by_id"
     t.datetime "approved_at"
     t.datetime "requested_at"
@@ -141,7 +141,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_27_091441) do
     t.uuid "to_uuid", null: false
     t.uuid "from_uuid", null: false
     t.string "invite_code", null: false
-    t.integer "type", null: false
+    t.integer "invite_type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

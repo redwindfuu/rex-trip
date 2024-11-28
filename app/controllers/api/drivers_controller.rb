@@ -3,7 +3,7 @@ class Api::DriversController < ApplicationController
   skip_before_action :authenticate_driver, only: [:login, :refresh_token, :create]
 
   def trip_histories
-    trips =  Trip.where(driver_id: @current_driver[:id])
+    trips =  Trip.where(driver_id: @current_driver[:id]).order("created_at DESC")
     render_json(
       ActiveModelSerializers::SerializableResource.new(
         trips.page(pagination[:page]).per(pagination[:per_page]),
@@ -15,7 +15,7 @@ class Api::DriversController < ApplicationController
   end
 
   def get_balance_transactions
-    transactions = DriverBalanceTransaction.where(driver_id: @current_driver[:id])
+    transactions = DriverBalanceTransaction.where(driver_id: @current_driver[:id]).order("created_at DESC")
     render_json(
       ActiveModelSerializers::SerializableResource.new(
         transactions.page(pagination[:page]).per(pagination[:per_page]),

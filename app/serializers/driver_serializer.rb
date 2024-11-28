@@ -1,5 +1,5 @@
 class DriverSerializer < ActiveModel::Serializer
-  attributes :id, :uuid , :email, :full_name, :phone, :avatar_link, :username, :invite_code, :kyc_status, :is_available, :rating_avg
+  attributes :id, :uuid, :email, :full_name, :phone, :avatar_link, :username, :invite_code, :kyc_status, :is_available, :rating_avg
 
   attribute :detail_option,
             if: -> { show_type?('detail') }
@@ -26,15 +26,17 @@ class DriverSerializer < ActiveModel::Serializer
   def detail_option
     kyc_by_admin = Admin.find(object.kyc_by_id) if object.kyc_by_id
     domain = ENV.fetch('DOMAIN', 'http://localhost:8000')
+    back_side_link = object.backside_link.nil? ? nil : domain + object.backside_link
+    front_side_link = object.front_side_link.nil? ? nil : domain + object.front_side_link
     {
-      kyc_by: kyc_by_admin&.username,
+      kyc_by: kyc_by_admin&.username || nil,
       kyc_review: object.kyc_review,
       kyc_at: object.kyc_at,
       id_number: object.id_number,
-      front_side_link: domain + object.front_side_link,
-      backside_link: domain + object.backside_link,
+      front_side_link: front_side_link,
+      backside_link: back_side_link,
       balance: object.balance,
-      invite_amount: object.amount_invite,
+      invite_amount: object.amount_invite
     }
   end
 

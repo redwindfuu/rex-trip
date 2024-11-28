@@ -17,6 +17,9 @@ class AdminCommands::ReviewKycCommand
       return
     end
     driver.status= get_status
+    if @status == "approved"
+      driver.is_available = true
+    end
     driver.kyc_review= @review
     driver.kyc_by= @admin
     driver.kyc_at= Time.now.to_datetime

@@ -3,7 +3,7 @@
 module DriverValidator
   class RequestBalanceValidator < ParamsChecker::BaseParamsChecker
 
-    INVALID_TYPE = [ DriverBalanceTransaction.types[:deposited], DriverBalanceTransaction.types[:withdraw] ]
+    INVALID_TYPE = [ DriverBalanceTransaction.transaction_types[:deposited], DriverBalanceTransaction.transaction_types[:withdrawn] ]
     def schema
       {
         driver_id: int_field,
@@ -13,7 +13,7 @@ module DriverValidator
     end
 
     def check_type(type)
-      if INVALID_TYPE.include?(DriverBalanceTransaction.types[type.to_sym])
+      if INVALID_TYPE.include?(DriverBalanceTransaction.transaction_types[type.to_sym])
         type
       else
         raise_error("Type is invalid")

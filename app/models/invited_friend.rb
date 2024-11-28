@@ -1,38 +1,12 @@
 class InvitedFriend < ApplicationRecord
-  enum type: {
+  enum invite_type: {
     CC: 0,
     DD: 1,
     CD: 2,
     DC: 3
   }
 
-  def self.get_invitees(to_uuid)
-    users = InvitedFriend.where(to_uuid: to_uuid)
-    res = users.map do |user|
-      if to_type(user.type.to_i)[1] == "C"
-        customer = Customer.find_by(uuid: user.from_uuid).first
-        return {
-          id: customer.id,
-          username: customer.username,
-          full_name: customer.full_name,
-          uuid: customer.uuid,
-          type: "customer"
-        }
-      else
-        driver = Driver.find_by(uuid: user.from_uuid).first
-        return {
-          id: driver.id,
-          username: driver.username,
-          full_name: driver.full_name,
-          uuid: driver.uuid,
-          type: "driver"
-        }
-      end
-    end
-  end
-
-  private
-  def to_type(type_int)
+  def self.convert_type(type_int)
     case type_int
     when 0
       "CC"
@@ -46,5 +20,34 @@ class InvitedFriend < ApplicationRecord
       ""
     end
   end
+
+  def self.get_invitees(to_uuid)
+    users = InvitedFriend.where(to_uuid: to_uuid)
+    res = users.map do |user|
+      if user.invite_type[1] == "C"
+        customer = Customer.find_by(uuid: user.from_uuid)
+         {
+          id: customer[:id],
+          username: customer[:username],
+          full_name: customer[:full_name],
+          uuid: customer[:uuid],
+          invite_type: "customer"
+        }
+      else
+        driver = Driver.find_by(uuid: user.from_uuid)
+         {
+          id: driver[:id],
+          username: driver[:username],
+          full_name: driver[:full_name],
+          uuid: driver[:uuid],
+          invite_type: "driver"
+        }
+      end
+    end
+    res
+  end
+
+
+  private
 
 end

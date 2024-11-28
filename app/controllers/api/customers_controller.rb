@@ -3,7 +3,7 @@ class Api::CustomersController < ApplicationController
   skip_before_action :authenticate_customer, only: [ :login, :refresh_token, :create ]
 
   def trip_histories
-    trips = Trip.where(customer_id: @current_customer.id)
+    trips = Trip.where(customer_id: @current_customer.id).order("created_at DESC")
     render_json(
       ActiveModelSerializers::SerializableResource.new(
         trips.page(pagination[:page]).per(pagination[:per_page]),
@@ -19,7 +19,7 @@ class Api::CustomersController < ApplicationController
   end
 
   def rate_trip
-    cmd = TripCommands::RateTripCommand.call(@current_customer.id, params[:rating])
+    cmd = TripCommands::RateTripCommand.call(params[:trip_id], params[:rating], @current_customer.id)
     if cmd.success?
       render_json(cmd.result, status: :ok, message: "Trip rated successfully")
     else
@@ -55,7 +55,7 @@ class Api::CustomersController < ApplicationController
   def login
     cmd = CustomerCommands::CustomerAuthCommand.call(params[:username], params[:password])
     if cmd.success?
-      cookies[:auth_token] = cmd.result[:refresh_token]
+      cookies[:auth_token_customer] = cmd.result[:refresh_token]
       render json: {
         data: cmd.result,
         message: "You are logged in!"
@@ -66,7 +66,7 @@ class Api::CustomersController < ApplicationController
   end
 
   def refresh_token
-    cmd = AuthCommands::CheckRefreshTokenCommand.call(cookies[:auth_token], "customer")
+    cmd = AuthCommands::CheckRefreshTokenCommand.call(cookies[:auth_token_customer], "customer")
     if cmd.success?
       cookies[:auth_token] = cmd.result[:refresh_token]
       render json: { data: cmd.result }, status: :ok
@@ -79,7 +79,7 @@ class Api::CustomersController < ApplicationController
   def logout
     acc = token
     add_blacklist_token(acc, "customer")
-    AuthCommands::RemoveRefreshTokenCommand.call(cookies[:auth_token], "customer")
+    AuthCommands::RemoveRefreshTokenCommand.call(cookies[:auth_token_customer], "customer")
     render json: { message: "You are logged out!" }, status: :ok
   end
 
