@@ -4,6 +4,7 @@ module TripValidator
   class RequestTripValidator < ParamsChecker::BaseParamsChecker
     def schema
       {
+        customer_id: int_field,
         to_place_id: int_field,
         froms: arr_field,
         seat: int_field,

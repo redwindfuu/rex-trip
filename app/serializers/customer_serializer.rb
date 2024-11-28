@@ -10,7 +10,7 @@ class CustomerSerializer < ActiveModel::Serializer
     # if the avatar link is nil, return nil
     # else, return the full link
     # domain + avatar_link
-    object.avatar_link.nil? ? nil : domain + object.avatar_link
+    object.avatar_link.nil? ? nil : object.avatar_link
   end
 
   def invite_amount

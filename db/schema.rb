@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_26_215750) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_27_051152) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -186,7 +186,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_26_215750) do
     t.integer "seat"
     t.datetime "start_time_est"
     t.datetime "start_time_real"
-    t.integer "status", default: 0
+    t.integer "trip_status", default: 0
     t.integer "rating"
     t.decimal "total_price"
     t.decimal "est_price"

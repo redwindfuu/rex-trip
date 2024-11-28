@@ -16,12 +16,13 @@ module CustomerCommands
         user_data = {
           user: {
             id: user[:id],
-            username: user[:username]
+            username: user[:username],
+            uuid: user[:uuid]
           },
           type: "customer"
         }
         access_token = Auth.issue(user_data)
-        refresh_token = AuthCommands::AddRefreshTokenCommand.call(user[:id], "customer")
+        refresh_token = AuthCommands::AddRefreshTokenCommand.call(user[:uuid], "customer")
         return { access_token: access_token, user: CustomerSerializer.new(user), refresh_token: refresh_token.result }
       else
         errors.add(:base, "Invalid username or password")

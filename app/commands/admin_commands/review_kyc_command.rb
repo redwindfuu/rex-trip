@@ -14,7 +14,7 @@ class AdminCommands::ReviewKycCommand
     driver = Driver.find_by(id: @driver_id)
     if driver.nil?
       errors.add(:error, "Driver not found")
-      nil
+      return
     end
     driver.status= get_status
     driver.kyc_review= @review

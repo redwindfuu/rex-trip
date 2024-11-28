@@ -12,7 +12,12 @@ class Api::CustomersController < ApplicationController
 
 
   def request_trip
-
+    cmd = TripCommands::RequestTripCommand.call(@current_customer.id, params)
+    if cmd.success?
+      render_json(cmd.result, status: :created, message: "Trip requested successfully")
+    else
+      render json: { error: cmd.errors }, status: :unprocessable_entity
+    end
   end
 
 

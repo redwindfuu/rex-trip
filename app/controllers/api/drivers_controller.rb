@@ -9,6 +9,15 @@ class Api::DriversController < ApplicationController
     )
   end
 
+  def change_trip_status
+    cmd = TripCommands::ChangeStatusTripCommand.call(@current_driver[:id], params[:trip_id], params[:status])
+    if cmd.success?
+      render_json(cmd.result, status: :ok, message: "Trip status changed successfully")
+    else
+      render json: { error: cmd.errors }, status: :unprocessable_entity
+    end
+  end
+
   def get_information
     render_json(DriverSerializer.new(@current_driver, show_more_info: "detail"), status: :ok, message: "Driver fetched successfully")
   end
@@ -42,13 +51,10 @@ class Api::DriversController < ApplicationController
   end
 
   def create
-
     validator = DriverValidator::CreateDriverValidator.call(params: driver_params)
-
     if validator.failure?
       raise Errors::Invalid, validator.errors
     end
-
     driver = Driver.new(driver_params)
     if driver.save
       render_json(DriverSerializer.new(driver, show_more_info: "detail"), status: :created, message: "Driver created successfully")
@@ -67,7 +73,12 @@ class Api::DriversController < ApplicationController
   end
 
   def approve_trip
-
+    cmd = TripCommands::ApproveTripCommand.call(@current_driver[:id], params[:trip_id])
+    if cmd.success?
+      render_json(cmd.result, status: :ok, message: "Trip approved successfully")
+    else
+      render json: { error: cmd.errors }, status: :unprocessable_entity
+    end
   end
 
 
@@ -80,7 +91,12 @@ class Api::DriversController < ApplicationController
   end
 
   def payment
-
+    cmd = TripCommands::PayTripCommand.call(params[:trip_id], params[:amount])
+    if cmd.success?
+      render_json(cmd.result, status: :ok, message: "Payment successful")
+    else
+      render json: { error: cmd.errors }, status: :unprocessable_entity
+    end
   end
 
   def request_transaction

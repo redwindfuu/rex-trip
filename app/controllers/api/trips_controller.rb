@@ -1,5 +1,10 @@
 class Api::TripsController < ApplicationController
-
+  def trip_available
+    trips = Trip.get_available
+    render_json(
+      ActiveModelSerializers::SerializableResource.new(trips, each_serializer: TripSerializer),
+      status: :ok, message: "Trips fetched successfully")
+  end
   def index
     page = params[:page] || 1
     per_page = params[:per_page] || 10
@@ -37,9 +42,7 @@ class Api::TripsController < ApplicationController
   end
 
 
-  def trip_available
 
-  end
 
   private
   def trip_params

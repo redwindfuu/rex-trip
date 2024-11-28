@@ -14,7 +14,7 @@ class PlaceExpense < ApplicationRecord
   end
   
   def self.get_expense_between_places(from_place_id, to_place_id)
-    PlaceExpense.where("from_place_id = ? AND to_place_id = ? OR from_place_id = ? AND to_place_id = ?", from_place_id, to_place_id, to_place_id, from_place_id)
+    PlaceExpense.where("from_place_id = ? AND to_place_id = ? OR from_place_id = ? AND to_place_id = ?", from_place_id, to_place_id, to_place_id, from_place_id).first
   end
   
 end

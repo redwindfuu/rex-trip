@@ -7,7 +7,8 @@ class DriverSerializer < ActiveModel::Serializer
 
   def avatar_link
     domain = ENV.fetch('DOMAIN', 'http://localhost:8000')
-    object.avatar_link.nil? ? nil : "#{domain}#{object.avatar_link}"
+    # object.avatar_link.nil? ? nil : "#{domain}#{object.avatar_link}"
+    object.avatar_link.nil? ? nil : object.avatar_link
   end
 
   def invite_amount
