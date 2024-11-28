@@ -75,8 +75,8 @@ module TripCommands
         return false
       end
 
-      if trip&.trip_status == Trip.trip_statuses[:ARRIVED] && to_status == :CANCELED
-        errors.add(:error, "Trip is already arrived and can't be canceled")
+      if (trip&.trip_status == Trip.trip_statuses[:ARRIVED] || trip&.trip_status == Trip.trip_statuses[:IN_PROCESS]) && to_status == :CANCELED
+        errors.add(:error, "Trip is already arrived or in process and can't be canceled")
         return false
       end
 

@@ -17,6 +17,7 @@ Rails.application.routes.draw do
         put "drivers/transactions/:transaction_id" => "admins#update_transaction"
 
         get "customers" => "admins#get_customers"
+        get "customers/:id" => "admins#get_customer"
       end
     end
 
@@ -47,6 +48,7 @@ Rails.application.routes.draw do
       collection do
         get "trips/histories" => "drivers#trip_histories"
         get "trips/available" => "drivers#available_trips"
+        get "trips/current" => "drivers#current_trip"
         post "trips/:trip_id/approve" => "drivers#approve_trip"
         put "trips/:trip_id/change-status" => "drivers#change_trip_status"
         put "trips/:trip_id/payment" => "drivers#payment"

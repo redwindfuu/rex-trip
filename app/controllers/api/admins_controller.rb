@@ -72,6 +72,16 @@ class Api::AdminsController < ApplicationController
     rescue Exception => e
       raise Errors::ApplicationError, e.message
     end
+    end
+
+
+  def get_customer
+    begin
+      customer = Customer.find(params[:id])
+      render_json(CustomerSerializer.new(customer), status: :ok, message: "Customer fetched successfully")
+    rescue Exception => e
+      raise Errors::ApplicationError, e.message
+    end
   end
 
   def change_password
