@@ -3,13 +3,29 @@ class Api::CustomersController < ApplicationController
   skip_before_action :authenticate_customer, only: [ :login, :refresh_token, :create ]
 
   def trip_histories
-    render json: { data: Trip.where(customer_id: @current_customer.id) }, status: :ok
+    trips = Trip.where(customer_id: @current_customer.id)
+    render_json(
+      ActiveModelSerializers::SerializableResource.new(
+        trips.page(pagination[:page]).per(pagination[:per_page]),
+        each_serializer: TripSerializer),
+        status: :ok,
+        message: "Trips fetched successfully",
+        meta: { total: trips.length }
+    )
   end
 
   def get_information
     render json: { data: CustomerSerializer.new(@current_customer) }, status: :ok
   end
 
+  def rate_trip
+    cmd = TripCommands::RateTripCommand.call(@current_customer.id, params[:rating])
+    if cmd.success?
+      render_json(cmd.result, status: :ok, message: "Trip rated successfully")
+    else
+      render json: { error: cmd.errors }, status: :unprocessable_entity
+    end
+  end
 
   def request_trip
     cmd = TripCommands::RequestTripCommand.call(@current_customer.id, params)

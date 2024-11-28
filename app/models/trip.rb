@@ -10,6 +10,7 @@ class Trip < ApplicationRecord
   has_many :arrivals, dependent: :destroy
   has_many :payments, dependent: :destroy
 
+
   validates :seat, presence: true, numericality: { greater_than: 0 }
   validates :total_price, presence: true, numericality: { greater_than: 0 }, allow_nil: false
 

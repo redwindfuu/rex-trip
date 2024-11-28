@@ -20,7 +20,12 @@ class Api::AdminsController < ApplicationController
   end
 
   def update_transaction
-
+    command = AdminCommands::UpdateTransactionCommand.call(@current_admin, params[:transaction_id], params[:status])
+    if command.success?
+      render json: { message: "Transaction updated successfully", data: nil }, status: :ok
+    else
+      raise Errors::Invalid, "Transaction update failed"
+    end
   end
 
   def review_kyc

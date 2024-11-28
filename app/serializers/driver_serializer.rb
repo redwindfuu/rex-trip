@@ -1,5 +1,5 @@
 class DriverSerializer < ActiveModel::Serializer
-  attributes :id, :uuid , :email, :full_name, :phone, :avatar_link, :username, :invite_code, :invite_amount, :kyc_status, :is_available, :rating_avg
+  attributes :id, :uuid , :email, :full_name, :phone, :avatar_link, :username, :invite_code, :kyc_status, :is_available, :rating_avg
 
   attribute :detail_option,
             if: -> { show_type?('detail') }
@@ -33,7 +33,8 @@ class DriverSerializer < ActiveModel::Serializer
       id_number: object.id_number,
       front_side_link: domain + object.front_side_link,
       backside_link: domain + object.backside_link,
-      balance: object.balance
+      balance: object.balance,
+      invite_amount: object.amount_invite,
     }
   end
 

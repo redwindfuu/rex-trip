@@ -1,5 +1,5 @@
 class Api::PlacesController < ApplicationController
-
+  before_action :is_auth?
   def index
     @places = Place.all
     render_json(
