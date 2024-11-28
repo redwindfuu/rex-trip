@@ -11,6 +11,23 @@ class DriverBalanceTransaction < ApplicationRecord
 
   before_create :set_default_status
 
+
+  def self.create_transaction(driver_id, amount, balance_after, type)
+    transaction = DriverBalanceTransaction.create(
+      driver_id: driver_id,
+      amount: amount,
+      balance_after: balance_after,
+      type: type,
+    )
+
+    if type == :trip_fee
+      transaction.status = statuses[:approved]
+      transaction.approved_at = Time.zone.now
+    end
+
+    transaction.save!
+  end
+
   private
 
   def set_default_status

@@ -1,4 +1,4 @@
-require 'params_checker'
+require "params_checker"
 
 class ApplicationController < ActionController::API
   # include Response
@@ -30,11 +30,11 @@ class ApplicationController < ActionController::API
     raise Errors::Unauthorized, "Unauthorized" unless auth_present? && auth
   end
 
-  def render_json(data, status: :ok, message: nil, meta: nil)
+  def render_json(data, status: :ok, message: nil, meta: nil, serializer: nil)
     response = { data: data }
     response[:message] = message if message
     response[:meta] = meta if meta
-    render json: response, status: status
+    render json: response, status: status, serializer: serializer
   end
 
   def pagination

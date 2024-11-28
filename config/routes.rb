@@ -13,20 +13,23 @@ Rails.application.routes.draw do
         get "drivers" => "admins#get_drivers"
         get "drivers/:id" => "admins#get_driver"
         put "drivers/:driver_id/kyc-review" => "admins#review_kyc"
-        get "driver/transactions" => "admins#driver_transactions"
-        put "driver/transactions/:id" => "admins#update_transaction"
+        get "driver/transactions" => "admins#transactions"
+        put "driver/transactions/:transaction_id" => "admins#update_transaction"
+
         get "customers" => "admins#get_customers"
       end
     end
 
-    resources :trips, only: [ :index, :create, :update, :destroy ] do
+    resources :trips, only: [ :create ] do
       collection do
         get "available" => "trips#trip_available"
-        # get ":id" => "trips#show"
+        get ":id" => "trips#show"
+        put ":id" => "trips#update"
+        delete ":id" => "trips#destroy"
       end
     end
 
-    resources :places, only: [ :index, :show]
+    resources :places, only: [ :index, :show ]
 
     resources :customers, only: [ :create ] do
       collection do
@@ -47,7 +50,8 @@ Rails.application.routes.draw do
         post "trips/:trip_id/approve" => "drivers#approve_trip"
         put "trips/:trip_id/change-status" => "drivers#change_trip_status"
         put "trips/:trip_id/payment" => "drivers#payment"
-
+        get "transactions/histories" => "drivers#get_balance_transactions"
+        post "transactions/request" => "drivers#request_balance"
         post "login" => "drivers#login"
         post "logout" => "drivers#logout"
         post "refresh" => "drivers#refresh_token"
@@ -59,7 +63,10 @@ Rails.application.routes.draw do
     resources :documents, only: [ :create, :show ]
 
     resources :systems, only: [] do
-
+      collection do
+        get "invitees" => "systems#invitees"
+        post "invite" => "systems#enter_code"
+      end
     end
 
   end

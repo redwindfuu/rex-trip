@@ -41,8 +41,6 @@ module TripCommands
         return
       end
 
-
-
       return unless check_trip_cant_change_status(trip, status.to_sym)
 
       if status.to_sym == :FINISHED
@@ -53,6 +51,14 @@ module TripCommands
         driver.is_available = true
         driver.balance -= trip.fee
         driver.save!
+
+        DriverBalanceTransaction.create_transaction(
+          driver.id,
+          -trip.fee,
+          driver.balance,
+          DriverBalanceTransaction.types[:trip_fee]
+        )
+
       end
 
       trip.trip_status = Trip.trip_statuses[@status.to_sym].to_i

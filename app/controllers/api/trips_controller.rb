@@ -1,4 +1,7 @@
 class Api::TripsController < ApplicationController
+
+  before_action :is_auth?
+
   def trip_available
     trips = Trip.get_available
     render_json(

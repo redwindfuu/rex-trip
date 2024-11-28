@@ -3,11 +3,39 @@ class Api::DriversController < ApplicationController
   skip_before_action :authenticate_driver, only: [:login, :refresh_token, :create]
 
   def trip_histories
-    render_json(ActiveModelSerializers::SerializableResource.new(@current_driver.trips, each_serializer: TripSerializer),
+    trips =  Trip.where(driver_id: @current_driver[:id])
+    render_json(
+      ActiveModelSerializers::SerializableResource.new(
+        trips.page(pagination[:page]).per(pagination[:per_page]),
+                each_serializer: TripSerializer),
                 status: :ok,
-                message: "Trips fetched successfully"
+                message: "Trips fetched successfully",
+                meta: { total: trips.length }
     )
   end
+
+  def get_balance_transactions
+    transactions = DriverBalanceTransaction.where(driver_id: @current_driver[:id])
+    render_json(
+      ActiveModelSerializers::SerializableResource.new(
+        transactions.page(pagination[:page]).per(pagination[:per_page]),
+        each_serializer: TransactionSerializer),
+        status: :ok,
+        message: "Transactions fetched successfully",
+        meta: { total: transactions.length }
+    )
+  end
+
+  def request_balance
+    cmd = DriverCommands::RequestBalanceCommand.call(@current_driver[:id], params[:amount], params[:type])
+    if cmd.success?
+      render_json(cmd.result, status: :ok, message: "Balance requested successfully")
+    else
+      render json: { error: cmd.errors }, status: :unprocessable_entity
+    end
+  end
+
+
 
   def change_trip_status
     cmd = TripCommands::ChangeStatusTripCommand.call(@current_driver[:id], params[:trip_id], params[:status])
@@ -81,13 +109,14 @@ class Api::DriversController < ApplicationController
     end
   end
 
-
-  def finish_trip
-
-  end
-
   def current_trip
-
+    current_trip = Trip.where(driver_id: @current_driver[:id], status: [1, 2, 3]).first
+    # current_trip = Trip.where.(driver_id: @current_driver[:id])
+    if current_trip
+      render_json(current_trip, status: :ok, message: "Current trip fetched successfully", serializer: )
+    else
+      render json: { error: "No current trip" }, status: :not_found
+    end
   end
 
   def payment

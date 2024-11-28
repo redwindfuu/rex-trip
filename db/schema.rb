@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_27_051152) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_27_091441) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -135,6 +135,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_27_051152) do
     t.datetime "updated_at", null: false
     t.text "kyc_review"
     t.index ["kyc_by_id"], name: "index_drivers_on_kyc_by_id"
+  end
+
+  create_table "invited_friends", force: :cascade do |t|
+    t.uuid "to_uuid", null: false
+    t.uuid "from_uuid", null: false
+    t.string "invite_code", null: false
+    t.integer "type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "payments", force: :cascade do |t|
