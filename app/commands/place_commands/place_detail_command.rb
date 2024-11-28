@@ -8,7 +8,7 @@ module PlaceCommands
       @place_id = place_id
     end
 
-    def call
+    def call  
       place = Place.find_by(id: @place_id)
       raise Errors::NotFound, "Place not found" unless place
       all_place = PlaceExpense.get_expense_of_place(@place_id)

@@ -106,6 +106,4 @@ class Api::CustomersController < ApplicationController
                   :username
           )
   end
-
-
 end

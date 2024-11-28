@@ -2,7 +2,8 @@
 
 module DriverValidator
   class CreateDriverValidator < ParamsChecker::BaseParamsChecker
-  def schema
+    #TODO: search rails validator model
+    def schema
       {
         id: int_field(required: false),
         email: char_field,

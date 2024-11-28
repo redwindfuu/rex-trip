@@ -52,6 +52,7 @@ module TripCommands
         trip.total_price = fee_price
         trip.fee = fee_price * FEE_RATE
         trip.save
+        trip
       end
     end
   end
