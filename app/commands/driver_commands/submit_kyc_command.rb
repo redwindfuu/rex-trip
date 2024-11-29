@@ -20,6 +20,5 @@ module DriverCommands
       driver.status= Driver.statuses[:pending]
       driver.save!
     end
-
   end
 end

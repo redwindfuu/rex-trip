@@ -33,7 +33,7 @@ module RexTrip
     # in config/environments, which are processed later.
     config.time_zone = "Asia/Ho_Chi_Minh"
     config.eager_load_paths << Rails.root.join("extras")
-    config.autoload_paths << Rails.root.join('lib')
+    config.autoload_paths << Rails.root.join("lib")
 
 
     # Only loads a smaller set of middleware suitable for API only apps.

@@ -6,7 +6,7 @@ module TripCommands
 
     attr_accessor :trip_id, :amount
 
-    def initialize(trip_id , amount)
+    def initialize(trip_id, amount)
       @trip_id = trip_id
       @amount = amount
     end
@@ -35,6 +35,5 @@ module TripCommands
         Payment.create!(trip_id: trip_id, amount: amount)
       end
     end
-
   end
 end

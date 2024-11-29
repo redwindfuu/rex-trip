@@ -16,6 +16,5 @@ module TripValidator
       end
       rating
     end
-
   end
 end

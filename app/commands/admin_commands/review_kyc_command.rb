@@ -19,6 +19,8 @@ class AdminCommands::ReviewKycCommand
     driver.status= get_status
     if @status == "approved"
       driver.is_available = true
+    else
+      AdminKycMailer.reject(driver.id).deliver_later 
     end
     driver.kyc_review= @review
     driver.kyc_by= @admin
@@ -39,4 +41,3 @@ class AdminCommands::ReviewKycCommand
     end
   end
 end
-

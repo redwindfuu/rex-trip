@@ -1,7 +1,7 @@
 module AuthCommands
   class RemoveRefreshTokenCommand
     prepend SimpleCommand
-    def initialize(token , token_type)
+    def initialize(token, token_type)
       @token = token
       @type = token_type
     end

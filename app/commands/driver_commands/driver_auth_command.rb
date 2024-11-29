@@ -2,7 +2,6 @@
 
 module DriverCommands
   class DriverAuthCommand
-
     prepend SimpleCommand
 
     def initialize(username = nil, password = nil)
@@ -24,7 +23,7 @@ module DriverCommands
         }
         access_token = Auth.issue(user_data)
         refresh_token = AuthCommands::AddRefreshTokenCommand.call(user[:uuid], "driver")
-        return { access_token: access_token, user: DriverSerializer.new(user), refresh_token: refresh_token.result }
+        { access_token: access_token, user: DriverSerializer.new(user), refresh_token: refresh_token.result }
       else
         errors.add(:base, "Invalid username or password")
       end

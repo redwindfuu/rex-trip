@@ -2,7 +2,6 @@
 
 module TripCommands
   class ChangeStatusTripCommand
-
     attr_accessor :driver_id, :trip_id, :status
     prepend SimpleCommand
     # include ActiveModel::Validations
@@ -66,7 +65,6 @@ module TripCommands
         trip.start_time_real = Time.zone.now
       end
       trip.save!
-
     end
 
     def check_trip_cant_change_status(trip, to_status)
@@ -82,6 +80,5 @@ module TripCommands
 
       true
     end
-
   end
 end

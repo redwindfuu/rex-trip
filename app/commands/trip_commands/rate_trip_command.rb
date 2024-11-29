@@ -46,6 +46,5 @@ module TripCommands
       rate = total_rating / trips.count
       Driver.find_by(id: driver_id).update!(rating_avg: rate)
     end
-
   end
 end

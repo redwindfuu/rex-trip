@@ -2,21 +2,17 @@
 
 class Api::AdminsController < ApplicationController
   before_action :authenticate_admin
-  skip_before_action :authenticate_admin, only: [:login, :refresh_token]
+  skip_before_action :authenticate_admin, only: [ :login, :refresh_token ]
 
   def transactions
-      begin
-      transactions = DriverBalanceTransaction.all
+    transactions = DriverBalanceTransaction.all.page(pagination[:page]).per(pagination[:per_page]).order("created_at DESC")
       render_json(ActiveModelSerializers::SerializableResource.new(
-          transactions.page(pagination[:page]).per(pagination[:per_page]),
+          transactions,
           each_serializer: TransactionSerializer),
                   status: :ok,
-                  meta: { total: transactions.length },
+                  meta: pagination_meta(transactions),
                   message: "Transactions fetched successfully"
       )
-    rescue Exception => e
-      raise Errors::ApplicationError, e.message
-    end
   end
 
   def update_transaction
@@ -38,18 +34,14 @@ class Api::AdminsController < ApplicationController
   end
 
   def get_drivers
-    begin
-      drivers = Driver.all.order("updated_at DESC")
+    drivers = Driver.all.order("updated_at DESC").page(pagination[:page]).per(pagination[:per_page])
       render_json(ActiveModelSerializers::SerializableResource.new(
-          drivers.page(pagination[:page]).per(pagination[:per_page]),
+          drivers,
           each_serializer: DriverSerializer, show_more_info: "detail"),
                   status: :ok,
-                  meta: { total: drivers.length },
+                  meta: pagination_meta(drivers),
                   message: "Drivers fetched successfully"
       )
-    rescue Exception => e
-      raise Errors::ApplicationError, e.message
-    end
   end
 
   def get_driver
@@ -60,28 +52,20 @@ class Api::AdminsController < ApplicationController
   end
 
   def get_customers
-    begin
-      customers = Customer.all
-      render_json(ActiveModelSerializers::SerializableResource.new(
-        customers.page(pagination[:page]).per(pagination[:per_page]),
+    customers = Customer.all.page(pagination[:page]).per(pagination[:per_page])
+    render_json(ActiveModelSerializers::SerializableResource.new(
+        customers,
         each_serializer: CustomerSerializer),
                   status: :ok,
-                  meta: { total: customers.length },
+                  meta: pagination_meta(customers),
                   message: "Customers fetched successfully"
       )
-    rescue Exception => e
-      raise Errors::ApplicationError, e.message
-    end
-    end
+  end
 
 
   def get_customer
-    begin
-      customer = Customer.find(params[:id])
-      render_json(CustomerSerializer.new(customer), status: :ok, message: "Customer fetched successfully")
-    rescue Exception => e
-      raise Errors::ApplicationError, e.message
-    end
+    customer = Customer.find(params[:id])
+    render_json(CustomerSerializer.new(customer), status: :ok, message: "Customer fetched successfully")
   end
 
   def change_password
@@ -94,8 +78,7 @@ class Api::AdminsController < ApplicationController
   end
 
   def get_trips
-    begin
-      trips = Trip.all
+    trips = Trip.all
       render_json(ActiveModelSerializers::SerializableResource.new(
         trips.page(pagination[:page]).per(pagination[:per_page]),
         each_serializer: TripSerializer),
@@ -103,9 +86,6 @@ class Api::AdminsController < ApplicationController
                   meta: { total: trips.length },
                   message: "Trips fetched successfully"
       )
-    rescue Exception => e
-      raise Errors::ApplicationError, e.message
-    end
   end
 
   def get_information
@@ -137,6 +117,10 @@ class Api::AdminsController < ApplicationController
     end
   end
 
+  def send_mail 
+    render_json({}, status: :ok, message: "Mail sent successfully")
+  end
+
   private
 
   def authenticate_admin
@@ -152,5 +136,4 @@ class Api::AdminsController < ApplicationController
   def change_password_params
     params.permit(:old_password, :new_password, :confirm_password)
   end
-
 end

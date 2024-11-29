@@ -43,4 +43,13 @@ class ApplicationController < ActionController::API
     { page: page, per_page: per_page }
   end
 
+  def pagination_meta (records)
+    {
+      total_count: records.total_count,
+      total_pages: records.total_pages,
+      current_page: records.current_page,
+      next_page: records.next_page,
+      prev_page: records.prev_page
+    }
+  end
 end

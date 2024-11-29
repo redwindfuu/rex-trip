@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
+require "bigdecimal"
+
 module DriverCommands
   class RequestBalanceCommand
-
     prepend SimpleCommand
 
     attr_accessor :driver_id, :amount, :type
@@ -36,18 +37,16 @@ module DriverCommands
         errors.add(:error, "Balance is not enough")
         return
       end
-      convert_amount = BigDecimal("-1") * BigDecimal(amount) if type.to_sym == :withdrawn
+      convert_amount = (type.to_sym == :withdrawn) ? BigDecimal("-1") * BigDecimal(amount) : BigDecimal(amount)
 
       ActiveRecord::Base.transaction do
         DriverBalanceTransaction.create_transaction(
           driver.id,
           convert_amount,
-          driver.balance + convert_amount,
+          BigDecimal(driver.balance) + convert_amount,
           DriverBalanceTransaction.transaction_types[type.to_sym]
         )
       end
-
     end
-
   end
 end

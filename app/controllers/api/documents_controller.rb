@@ -1,11 +1,11 @@
-class Api::DocumentsController < ApplicationController
+  class Api::DocumentsController < ApplicationController
   def create
     document = Document.new(document_params)
     if document.save!
       data = {
         title: document.title,
         link: url_for(document.file),
-        domain: ENV.fetch('DOMAIN', 'http://localhost:8000'),
+        domain: ENV.fetch("DOMAIN", "http://localhost:8000"),
         path: rails_blob_path(document.file, only_path: true),
         created_at: document.created_at,
         id: document.id
@@ -33,8 +33,8 @@ class Api::DocumentsController < ApplicationController
   end
 
   def handle_link (link)
-    #detach the link from the host
+    # detach the link from the host
     link.split("://")[1].split("/").drop(1).join("/")
     # link
   end
-end
+  end

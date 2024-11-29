@@ -1,4 +1,4 @@
- # frozen_string_literal: true
+# frozen_string_literal: true
 
 module TripCommands
   class RequestTripCommand
@@ -52,6 +52,7 @@ module TripCommands
         trip.total_price = fee_price
         trip.fee = fee_price * FEE_RATE
         trip.save
+        trip
       end
     end
   end

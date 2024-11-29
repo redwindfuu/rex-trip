@@ -26,7 +26,7 @@ module SystemCommands
         errors.add(:error, cmd.errors)
         return
       end
-      type , inviter = get_type_from_code(begin_type, code)
+      type, inviter = get_type_from_code(begin_type, code)
 
       is_invited = InvitedFriend.find_by(from_uuid: from_uuid)
       if is_invited
@@ -47,15 +47,13 @@ module SystemCommands
     def get_type_from_code(type, code)
       customer = Customer.find_by(invite_code: code)
 
-      return "C" + type , customer if customer
+      return "C" + type, customer if customer
 
       driver = Driver.find_by(invite_code: code)
 
-      return ["D" + type, driver] if driver
+      return [ "D" + type, driver ] if driver
 
-      [nil, nil]
+      [ nil, nil ]
     end
-
   end
 end
-

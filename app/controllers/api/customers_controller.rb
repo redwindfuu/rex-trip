@@ -3,14 +3,14 @@ class Api::CustomersController < ApplicationController
   skip_before_action :authenticate_customer, only: [ :login, :refresh_token, :create ]
 
   def trip_histories
-    trips = Trip.where(customer_id: @current_customer.id).order("created_at DESC")
+    trips = Trip.where(customer_id: @current_customer.id).order("created_at DESC").page(pagination[:page]).per(pagination[:per_page])
     render_json(
       ActiveModelSerializers::SerializableResource.new(
-        trips.page(pagination[:page]).per(pagination[:per_page]),
+        trips,
         each_serializer: TripSerializer),
         status: :ok,
         message: "Trips fetched successfully",
-        meta: { total: trips.length }
+        meta: pagination_meta(trips)
     )
   end
 
@@ -73,7 +73,6 @@ class Api::CustomersController < ApplicationController
     else
         raise Errors::ApplicationError
     end
-
   end
 
   def logout
@@ -106,6 +105,4 @@ class Api::CustomersController < ApplicationController
                   :username
           )
   end
-
-
 end
