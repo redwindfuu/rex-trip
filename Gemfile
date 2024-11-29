@@ -43,6 +43,9 @@ group :development, :test do
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
+  
+  
+gem "annotate" # Annotate Rails classes with schema information
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
@@ -65,5 +68,3 @@ gem "rexy_admin", git: "git@github.com:Rexy-Technology/rexy-admin.git", branch: 
 gem "faker"
 
 gem 'kaminari', '~> 1.2.1'
-
-gem "annotate" 

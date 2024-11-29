@@ -1,4 +1,17 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# == Schema Information
+#
+# Table name: arrivals
+#
+#  id            :bigint           not null, primary key
+#  name          :string
+#  place_id      :bigint
+#  trip_id       :bigint
+#  order_place   :integer
+#  end_time_est  :datetime
+#  end_time_real :datetime
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
 
 # This model initially had no columns defined. If you add columns to the
 # model remove the "{}" from the fixture names and add the columns immediately

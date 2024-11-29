@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: payments
+#
+#  id         :bigint           not null, primary key
+#  uuid       :uuid             not null
+#  trip_id    :bigint           not null
+#  amount     :decimal(10, 2)
+#  time_event :datetime
+#  method     :integer          default("cash")
+#  status     :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
 class Payment < ApplicationRecord
   has_one :trip
 
