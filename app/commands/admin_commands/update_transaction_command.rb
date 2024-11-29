@@ -2,7 +2,6 @@
 
 module AdminCommands
   class UpdateTransactionCommand
-
     prepend SimpleCommand
 
     attr_accessor :transaction_id, :status, :current_admin

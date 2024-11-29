@@ -61,5 +61,4 @@ class InvitedFriend < ApplicationRecord
 
 
   private
-
 end

@@ -26,5 +26,4 @@ class Customer < ApplicationRecord
     self.invite_code = SecureRandom.hex(15)
     self.amount_invite = 0
   end
-
 end

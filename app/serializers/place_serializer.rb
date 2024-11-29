@@ -28,5 +28,4 @@ class PlaceSerializer < ActiveModel::Serializer
       }
     end
   end
-
 end

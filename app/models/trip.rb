@@ -48,6 +48,4 @@ class Trip < ApplicationRecord
     Trip
       .where(trip_status: Trip.trip_statuses[:WAITING_DRIVER_APPROVE])
   end
-
-
 end

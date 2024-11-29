@@ -28,10 +28,9 @@ class Payment < ApplicationRecord
     self.status = Payment.statuses[:success]
   end
 
-  def self.check_payment_enough(trip_id , total)
+  def self.check_payment_enough(trip_id, total)
     payments = Payment.where(trip_id: trip_id)
     total_payment = payments.sum(:amount)
-    return total_payment >= total
+    total_payment >= total
   end
-
 end

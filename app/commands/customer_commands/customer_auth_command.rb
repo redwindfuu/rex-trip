@@ -22,11 +22,10 @@ module CustomerCommands
           type: "customer"
         }
         access_token = Auth.issue(user_data)
-        return { access_token: access_token, user: CustomerSerializer.new(user) }
+        { access_token: access_token, user: CustomerSerializer.new(user) }
       else
         errors.add(:base, "Invalid username or password")
       end
     end
-
   end
 end

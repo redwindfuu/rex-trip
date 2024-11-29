@@ -1,4 +1,4 @@
-require 'auth'
+require "auth"
 
 module AuthCommands
   class CheckRefreshTokenCommand
@@ -40,7 +40,7 @@ module AuthCommands
           @refresh_token_data.destroy
           { access_token: access_token, user: {
             id: user.id,
-            username: user.username,
+            username: user.username
           }, refresh_token: refresh_token.result }
         end
       end

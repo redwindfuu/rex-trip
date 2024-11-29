@@ -2,7 +2,6 @@
 
 module TripCommands
   class ApproveTripCommand
-
     prepend SimpleCommand
 
     attr_accessor :driver_id, :trip_id
@@ -39,6 +38,5 @@ module TripCommands
       trip.save
       driver.update!(is_available: false)
     end
-
   end
 end

@@ -29,5 +29,4 @@ class RefreshToken < ApplicationRecord
     crypted_token = Digest::SHA256.hexdigest token
     RefreshToken.find_by(crypted_token: crypted_token, type: type)
   end
-
 end

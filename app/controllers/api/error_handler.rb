@@ -10,7 +10,7 @@ module Api::ErrorHandler
     "Driggl::Authenticator::AuthorizationError" => "Errors::Unauthorized",
     "Pundit::NotAuthorizedError" => "Errors::Forbidden",
     "Errors::BadRequest" => "Errors::BadRequest",
-    "JWT::ExpiredSignature" => "Errors::Unauthorized",
+    "JWT::ExpiredSignature" => "Errors::Unauthorized"
   }
 
   included do
@@ -37,4 +37,3 @@ module Api::ErrorHandler
     render json: ErrorSerializer.new(error), status: error.status
   end
 end
-

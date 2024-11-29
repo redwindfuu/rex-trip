@@ -27,7 +27,7 @@ class Document < ApplicationRecord
       errors.add(:file, "is too big")
     end
 
-    acceptable_types = ["image/jpeg", "image/png", "application/pdf"]
+    acceptable_types = [ "image/jpeg", "image/png", "application/pdf" ]
     unless acceptable_types.include?(file.content_type)
       errors.add(:file, "must be a JPEG, PNG, or PDF")
     end

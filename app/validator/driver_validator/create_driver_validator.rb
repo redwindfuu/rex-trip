@@ -2,7 +2,7 @@
 
 module DriverValidator
   class CreateDriverValidator < ParamsChecker::BaseParamsChecker
-    #TODO: search rails validator model
+    # TODO: search rails validator model
     def schema
       {
         id: int_field(required: false),

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
-require 'bigdecimal'
+
+require "bigdecimal"
 
 module DriverCommands
   class RequestBalanceCommand
-
     prepend SimpleCommand
 
     attr_accessor :driver_id, :amount, :type
@@ -47,8 +47,6 @@ module DriverCommands
           DriverBalanceTransaction.transaction_types[type.to_sym]
         )
       end
-
     end
-
   end
 end

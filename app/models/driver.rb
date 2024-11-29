@@ -25,8 +25,8 @@
 #  updated_at      :datetime         not null
 #  kyc_review      :text
 #
-require 'bigdecimal'
-require 'rexy_admin'
+require "bigdecimal"
+require "rexy_admin"
 
 class Driver < ApplicationRecord
   has_secure_password
@@ -42,7 +42,7 @@ class Driver < ApplicationRecord
                     fields: %i[id username email phone balance rating_avg is_available amount_invite status invite_code kyc_at kyc_status kyc_review kyc_by_id kyc_by_username],
                     after_query:  ->(record, params) {
                       record
-                        .select('drivers.*, admins.username as kyc_by_username')
+                        .select("drivers.*, admins.username as kyc_by_username")
                         .left_outer_joins(:kyc_by)
                         .where(id: params[:id])
                     }
@@ -60,7 +60,7 @@ class Driver < ApplicationRecord
 
   enum status: { not_yet: 0, pending: 1, approved: 2, rejected: 3 }, _prefix: :kyc
 
-  belongs_to :kyc_by, class_name: 'Admin', optional: true
+  belongs_to :kyc_by, class_name: "Admin", optional: true
 
   validates :username, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true

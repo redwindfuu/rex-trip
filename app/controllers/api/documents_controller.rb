@@ -5,7 +5,7 @@
       data = {
         title: document.title,
         link: url_for(document.file),
-        domain: ENV.fetch('DOMAIN', 'http://localhost:8000'),
+        domain: ENV.fetch("DOMAIN", "http://localhost:8000"),
         path: rails_blob_path(document.file, only_path: true),
         created_at: document.created_at,
         id: document.id
@@ -33,8 +33,8 @@
   end
 
   def handle_link (link)
-    #detach the link from the host
+    # detach the link from the host
     link.split("://")[1].split("/").drop(1).join("/")
     # link
   end
-end
+  end

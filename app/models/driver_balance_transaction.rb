@@ -51,5 +51,4 @@ class DriverBalanceTransaction < ApplicationRecord
     self.transaction_status = DriverBalanceTransaction.transaction_statuses[:pending] if self.transaction_status.nil?
     self.transaction_type = DriverBalanceTransaction.transaction_types[:trip_fee] if self.transaction_type.nil?
   end
-
 end

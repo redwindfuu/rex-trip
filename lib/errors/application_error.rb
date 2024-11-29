@@ -10,7 +10,7 @@ module Errors
       {
         status: status,
         title: title,
-        detail: detail,
+        detail: detail
       }
     end
 
@@ -25,4 +25,3 @@ module Errors
     attr_reader :title, :detail, :status
   end
 end
-

@@ -10,5 +10,4 @@ class ApplicationRecord < ActiveRecord::Base
 
     self.id ||= UUID7.generate
   end
-
 end

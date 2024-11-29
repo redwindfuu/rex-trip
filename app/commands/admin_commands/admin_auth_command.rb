@@ -1,4 +1,4 @@
-require 'auth'
+require "auth"
 module AdminCommands
   class AdminAuthCommand
     prepend SimpleCommand
@@ -21,12 +21,11 @@ module AdminCommands
           }
           p user_data
           access_token = Auth.issue(user_data)
-          { access_token: access_token, user: AdminSerializer.new(user)}
+          { access_token: access_token, user: AdminSerializer.new(user) }
         else
           errors.add(:base, "Invalid username or password")
         end
       end
-
     end
   end
 end

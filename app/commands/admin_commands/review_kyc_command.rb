@@ -41,4 +41,3 @@ class AdminCommands::ReviewKycCommand
     end
   end
 end
-

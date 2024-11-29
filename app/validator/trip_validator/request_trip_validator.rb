@@ -7,7 +7,7 @@ module TripValidator
         customer_id: int_field,
         to_place_id: int_field,
         froms: arr_field,
-        seat: int_field,
+        seat: int_field
       }
     end
 
@@ -24,6 +24,5 @@ module TripValidator
         raise_error("order must be a number") unless order.is_a?(Integer)
       end
     end
-
   end
 end

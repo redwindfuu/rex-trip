@@ -10,11 +10,10 @@ module DriverCommands
 
     def call
       driver = Driver.find_by(id: @options[:id])
-      raise Errors::NotFound, 'Driver not found' unless driver
+      raise Errors::NotFound, "Driver not found" unless driver
 
       driver.update!(@options)
       driver
-
     end
   end
 end
