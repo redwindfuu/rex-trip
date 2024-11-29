@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_28_045059) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_29_015840) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -59,7 +59,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_28_045059) do
     t.bigint "trip_id"
     t.integer "order_place"
     t.datetime "end_time_est"
-    t.datetime "end_time_real"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["place_id"], name: "index_arrivals_on_place_id"
@@ -150,7 +149,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_28_045059) do
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.bigint "trip_id", null: false
     t.decimal "amount", precision: 10, scale: 2
-    t.datetime "time_event"
     t.integer "method", default: 0
     t.integer "status"
     t.datetime "created_at", null: false
@@ -203,6 +201,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_28_045059) do
     t.float "fee_rate"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "end_time_real"
     t.index ["booking_time"], name: "index_trips_on_booking_time"
     t.index ["customer_id"], name: "index_trips_on_customer_id"
     t.index ["depart_place_id"], name: "index_trips_on_depart_place_id"

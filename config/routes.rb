@@ -15,9 +15,10 @@ Rails.application.routes.draw do
         get "drivers/:id" => "admins#get_driver"
         put "drivers/:driver_id/kyc-review" => "admins#review_kyc"
         put "drivers/transactions/:transaction_id" => "admins#update_transaction"
-
         get "customers" => "admins#get_customers"
         get "customers/:id" => "admins#get_customer"
+
+        get "send" => "admins#send_mail"
       end
     end
 

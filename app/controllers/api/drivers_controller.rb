@@ -1,28 +1,34 @@
 class Api::DriversController < ApplicationController
   before_action :authenticate_driver
-  skip_before_action :authenticate_driver, only: [:login, :refresh_token, :create]
+  skip_before_action :authenticate_driver, only: [ :login, :refresh_token, :create ]
 
   def trip_histories
-    trips =  Trip.where(driver_id: @current_driver[:id]).order("created_at DESC")
+    trips =  Trip.where(driver_id: @current_driver[:id]).order("created_at DESC").page(pagination[:page]).per(pagination[:per_page])
     render_json(
       ActiveModelSerializers::SerializableResource.new(
-        trips.page(pagination[:page]).per(pagination[:per_page]),
+        trips,
                 each_serializer: TripSerializer),
                 status: :ok,
                 message: "Trips fetched successfully",
-                meta: { total: trips.length }
+                meta: pagination_meta(trips)
     )
   end
 
   def get_balance_transactions
-    transactions = DriverBalanceTransaction.where(driver_id: @current_driver[:id]).order("created_at DESC")
+    transactions = DriverBalanceTransaction
+      .includes(:admin)
+      .includes(:driver)
+      .where(driver_id: @current_driver[:id])
+      .order("created_at DESC")
+      .page(pagination[:page])
+      .per(pagination[:per_page])
     render_json(
       ActiveModelSerializers::SerializableResource.new(
-        transactions.page(pagination[:page]).per(pagination[:per_page]),
+        transactions,
         each_serializer: TransactionSerializer),
         status: :ok,
         message: "Transactions fetched successfully",
-        meta: { total: transactions.length }
+        meta: pagination_meta(transactions)
     )
   end
 
@@ -110,10 +116,10 @@ class Api::DriversController < ApplicationController
   end
 
   def current_trip
-    current_trip = Trip.where(driver_id: @current_driver[:id], status: [1, 2, 3]).first
+    current_trip = Trip.where(driver_id: @current_driver[:id], status: [ 1, 2, 3 ]).first
     # current_trip = Trip.where.(driver_id: @current_driver[:id])
     if current_trip
-      render_json(current_trip, status: :ok, message: "Current trip fetched successfully", serializer: )
+      render_json(current_trip, status: :ok, message: "Current trip fetched successfully", serializer:)
     else
       render json: { error: "No current trip" }, status: :not_found
     end
@@ -127,13 +133,6 @@ class Api::DriversController < ApplicationController
       render json: { error: cmd.errors }, status: :unprocessable_entity
     end
   end
-
-  def request_transaction
-
-  end
-
-
-
 
 
   # private methods below
@@ -170,5 +169,4 @@ class Api::DriversController < ApplicationController
             :backside_link
           )
   end
-
 end

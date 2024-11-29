@@ -1,4 +1,4 @@
-class Api::DocumentsController < ApplicationController
+  class Api::DocumentsController < ApplicationController
   def create
     document = Document.new(document_params)
     if document.save!

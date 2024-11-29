@@ -21,8 +21,7 @@ module AdminCommands
           }
           p user_data
           access_token = Auth.issue(user_data)
-          refresh_token = AuthCommands::AddRefreshTokenCommand.call(user[:uuid], "admin")
-          return { access_token: access_token, user: AdminSerializer.new(user), refresh_token: refresh_token.result }
+          { access_token: access_token, user: AdminSerializer.new(user)}
         else
           errors.add(:base, "Invalid username or password")
         end

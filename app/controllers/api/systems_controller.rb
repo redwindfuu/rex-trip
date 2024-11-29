@@ -16,5 +16,4 @@ class Api::SystemsController < ApplicationController
       render json: { error: cmd.errors }, status: :unprocessable_entity
     end
   end
-
 end

@@ -44,8 +44,21 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
 
   # Set localhost to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "localhost", port: 8000 }
+  config.action_mailer.default_url_options = { host: "localhost:8000", protocol: "http" }
 
+  config.action_mailer.delivery_method = :smtp
+
+  config.action_mailer.smtp_settings = {
+    user_name: ENV["EMAIL_USERNAME"],
+    password: ENV["EMAIL_PASSWORD"],
+    address: "smtp.gmail.com",
+    port: "587",
+    authentication: :plain,
+    enable_starttls_auto: true
+  }
+
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
