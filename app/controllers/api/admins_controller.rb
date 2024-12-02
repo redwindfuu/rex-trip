@@ -1,14 +1,18 @@
 # require 'errors/unauthorized'
 
 class Api::AdminsController < ApplicationController
-  before_action :authenticate_admin
-  skip_before_action :authenticate_admin, only: [ :login, :refresh_token ]
+  before_action :authenticate
+  skip_before_action :authenticate, only: [ :login, :refresh_token ]
 
   def transactions
-    transactions = DriverBalanceTransaction.all.page(pagination[:page]).per(pagination[:per_page]).order("created_at DESC")
-      render_json(ActiveModelSerializers::SerializableResource.new(
-          transactions,
-          each_serializer: TransactionSerializer),
+    transactions = DriverBalanceTransaction.all
+    .eager_load(:driver)
+    .eager_load(:admin)
+    .page(pagination[:page])
+    .per(pagination[:per_page])
+    .order("driver_balance_transactions.created_at DESC")
+
+    render_json(CollectionPresenter.new(transactions, DriverBalanceTransactionPresenter),
                   status: :ok,
                   meta: pagination_meta(transactions),
                   message: "Transactions fetched successfully"
@@ -110,11 +114,7 @@ class Api::AdminsController < ApplicationController
   end
 
   def refresh_token
-    cmd = AuthCommands::CheckRefreshTokenCommand.call(cookies[:auth_token_admin], "admin")
-    if cmd.success?
-      cookies[:auth_token] = cmd.result[:refresh_token]
-      render json: { data: cmd.result }, status: :ok
-    end
+    
   end
 
   def send_mail 
@@ -123,14 +123,29 @@ class Api::AdminsController < ApplicationController
 
   private
 
-  def authenticate_admin
-    raise Errors::Unauthorized, "Unauthorized" unless auth_present?
-    if auth["type"] == "admin" && !in_blacklist?(token, "admin")
-      @current_admin = Admin.find_by(username: auth["user"]["username"])
-      raise Errors::Unauthorized, "Unauthorized" unless @current_admin
-    else
-      raise Errors::Unauthorized, "Unauthorized"
+  # def authenticate_admin
+  #   raise Errors::Unauthorized, "Unauthorized" unless auth_present?
+  #   if auth["type"] == "admin" && !in_blacklist?(token, "admin")
+  #     @current_admin = Admin.find_by(username: auth["user"]["username"])
+  #     raise Errors::Unauthorized, "Unauthorized" unless @current_admin
+  #   else
+  #     raise Errors::Unauthorized, "Unauthorized"
+  #   end
+  # end
+
+  def authenticate
+    unless admin_token.present? && current_admin.present?
+      render json: { authentication: 'Not Authorized.' }, status: 401
     end
+  end
+
+  def admin_token
+    @admin_token ||= JsonWebToken.decode(request.headers['RexyAdmin-Authorization'])
+  end
+
+  def current_admin
+    @current_admin ||= RexyAdmin.auth_model.auth_query.find_by_id(admin_token[:admin_id])
+    # @current_admin ||= model.auth_query.find_by_id(admin_token[:admin_id])
   end
 
   def change_password_params

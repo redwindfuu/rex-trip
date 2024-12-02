@@ -66,13 +66,13 @@ class Api::CustomersController < ApplicationController
   end
 
   def refresh_token
-    cmd = AuthCommands::CheckRefreshTokenCommand.call(cookies[:auth_token_customer], "customer")
-    if cmd.success?
-      cookies[:auth_token] = cmd.result[:refresh_token]
-      render json: { data: cmd.result }, status: :ok
-    else
-        raise Errors::ApplicationError
-    end
+    # cmd = AuthCommands::CheckRefreshTokenCommand.call(cookies[:auth_token_customer], "customer")
+    # if cmd.success?
+    #   cookies[:auth_token] = cmd.result[:refresh_token]
+    #   render json: { data: cmd.result }, status: :ok
+    # else
+    #     raise Errors::ApplicationError
+    # end
   end
 
   def logout

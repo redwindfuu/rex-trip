@@ -1,4 +1,5 @@
 require "params_checker"
+require "./app/helpers/application_helper"
 
 class ApplicationController < ActionController::API
   # include Response
@@ -6,6 +7,7 @@ class ApplicationController < ActionController::API
   # include ActionController::MimeResponds
   include ActionController::Cookies
   include Api::ErrorHandler
+  include ApplicationHelper
 
   private
   def token

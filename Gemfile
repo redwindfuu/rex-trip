@@ -45,10 +45,13 @@ group :development, :test do
   gem "brakeman", require: false
   
   
-gem "annotate" # Annotate Rails classes with schema information
+  gem "annotate" # Annotate Rails classes with schema information
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  
+
 end
 
 # gem 'will_paginate', '~> 4.0'

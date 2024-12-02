@@ -18,6 +18,9 @@ class InvitedFriend < ApplicationRecord
     DC: 3
   }
 
+  
+
+
   def self.convert_type(type_int)
     case type_int
     when 0

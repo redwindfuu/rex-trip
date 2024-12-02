@@ -34,6 +34,8 @@ module RexTrip
     config.time_zone = "Asia/Ho_Chi_Minh"
     config.eager_load_paths << Rails.root.join("extras")
     config.autoload_paths << Rails.root.join("lib")
+    config.autoload_paths << Rails.root.join("app/helpers")
+    config.autoload_paths << Rails.root.join("app/presenters")
 
 
     # Only loads a smaller set of middleware suitable for API only apps.

@@ -62,6 +62,8 @@ class Driver < ApplicationRecord
 
   belongs_to :kyc_by, class_name: "Admin", optional: true
 
+  has_many :trips
+  has_many :balance_transaction, class_name: "DriverBalanceTransaction", foreign_key: "driver_id"
   validates :username, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true
   validates :phone, presence: true, uniqueness: true

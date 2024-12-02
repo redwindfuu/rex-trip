@@ -77,11 +77,11 @@ class Api::DriversController < ApplicationController
   end
 
   def refresh_token
-    cmd = AuthCommands::CheckRefreshTokenCommand.call(cookies[:auth_token], "driver")
-    if cmd.success?
-      cookies[:auth_token] = cmd.result[:refresh_token]
-      render json: { data: cmd.result }, status: :ok
-    end
+    # cmd = AuthCommands::CheckRefreshTokenCommand.call(cookies[:auth_token], "driver")
+    # if cmd.success?
+    #   cookies[:auth_token] = cmd.result[:refresh_token]
+    #   render json: { data: cmd.result }, status: :ok
+    # end
   end
 
   def create

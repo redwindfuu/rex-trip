@@ -5,4 +5,12 @@ class TransactionSerializer < ActiveModel::Serializer
 
   belongs_to :driver
   belongs_to :admin, optional: true
+
+  def driver
+    object.driver
+  end
+
+  def admin
+    object.admin if object.admin.present?
+  end
 end
