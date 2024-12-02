@@ -31,6 +31,22 @@ class TripSerializer < ActiveModel::Serializer
   has_many :arrivals, serializer: ArrivalSerializer
 
   def total_price
-        
+    object.total_price.to_f
+  end
+
+  def driver
+    object.driver
+  end
+
+  def customer
+    object.customer
+  end
+
+  def depart_place
+    object.depart_place
+  end
+
+  def arrivals
+    object.arrivals
   end
 end

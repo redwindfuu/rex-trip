@@ -17,4 +17,8 @@
 class ArrivalSerializer < ActiveModel::Serializer
   attributes :id, :end_time_est, :order_place, :name
   has_one :place, serializer: PlaceSerializer
+
+  def place
+    object.place
+  end
 end

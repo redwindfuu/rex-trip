@@ -25,6 +25,8 @@ class DriverBalanceTransaction < ApplicationRecord
   validates :amount, presence: true
   validates :balance_after, presence: true
 
+  validates_associated :admin, if: -> { approved_by_id.present? }
+
 
   before_create :set_default_status
 

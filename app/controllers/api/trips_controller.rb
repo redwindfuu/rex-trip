@@ -2,7 +2,9 @@ class Api::TripsController < ApplicationController
   before_action :is_auth?
 
   def trip_available
-    trips = Trip.get_available.page(pagination[:page]).per(pagination[:per_page]).order("created_at DESC")
+    trips = Trip.get_available
+      .eager_load(:driver, :customer, :depart_place, :arrivals)
+    .page(pagination[:page]).per(pagination[:per_page]).order("trips.created_at DESC")
     render_json(
       ActiveModelSerializers::SerializableResource.new(
         trips,

@@ -20,7 +20,6 @@ module TripCommands
         return nil
       end
 
-
       arrive_list = trip_params[:froms]
       arrive_list.sort_by! { |place| place[:order] }
       fee_price = BigDecimal("0")

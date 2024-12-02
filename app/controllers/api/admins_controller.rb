@@ -6,13 +6,13 @@ class Api::AdminsController < ApplicationController
 
   def transactions
     transactions = DriverBalanceTransaction.all
-    .eager_load(:driver)
-    .eager_load(:admin)
-    .page(pagination[:page])
-    .per(pagination[:per_page])
+        .eager_load(:driver)
+        .eager_load(:admin)
+      .page(pagination[:page])
+      .per(pagination[:per_page])
     .order("driver_balance_transactions.created_at DESC")
-
-    render_json(CollectionPresenter.new(transactions, DriverBalanceTransactionPresenter),
+    render_json(
+      CollectionPresenter.new(transactions, DriverBalanceTransactionPresenter),
                   status: :ok,
                   meta: pagination_meta(transactions),
                   message: "Transactions fetched successfully"
@@ -39,9 +39,8 @@ class Api::AdminsController < ApplicationController
 
   def get_drivers
     drivers = Driver.all.order("updated_at DESC").page(pagination[:page]).per(pagination[:per_page])
-      render_json(ActiveModelSerializers::SerializableResource.new(
-          drivers,
-          each_serializer: DriverSerializer, show_more_info: "detail"),
+      render_json(
+        CollectionPresenter.new(drivers, DriverPresenter),
                   status: :ok,
                   meta: pagination_meta(drivers),
                   message: "Drivers fetched successfully"
@@ -50,7 +49,9 @@ class Api::AdminsController < ApplicationController
 
   def get_driver
     driver = Driver.find(params[:id])
-    render_json(DriverSerializer.new(driver, show_more_info: "detail"),
+    binding.pry
+    render_json(
+      DriverPresenter.new(driver, show_more_info: "detail"), 
                 status: :ok,
                 message: "Driver fetched successfully")
   end
