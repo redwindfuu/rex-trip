@@ -11,6 +11,8 @@
 #  updated_at  :datetime         not null
 #
 class InvitedFriend < ApplicationRecord
+  belongs_to :inviter, polymorphic: true
+
   enum invite_type: {
     CC: 0,
     DD: 1,

@@ -20,9 +20,12 @@ class Customer < ApplicationRecord
   validates :username, presence: true, uniqueness: true
   has_many :trips
 
-  belongs_to :invitees, polymorphic: true, optional: true
+  has_many :sent_invites, as: :from, class_name: "InviteesFriend", dependent: :destroy
+  has_many :received_invites, as: :to, class_name: "InviteesFriend", dependent: :destroy
 
   has_many :driver, as: :invitees
+
+
   
   before_create :preprocess_create
 

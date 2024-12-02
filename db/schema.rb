@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_29_015840) do
+ActiveRecord::Schema[7.0].define(version: 2024_12_02_095002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -143,6 +143,19 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_29_015840) do
     t.integer "invite_type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "invitees_friends", force: :cascade do |t|
+    t.string "from_type", null: false
+    t.bigint "from_id", null: false
+    t.string "to_type", null: false
+    t.bigint "to_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["from_id", "from_type"], name: "index_invitees_friends_on_from_id_and_from_type"
+    t.index ["from_type", "from_id"], name: "index_invitees_friends_on_from"
+    t.index ["to_id", "to_type"], name: "index_invitees_friends_on_to_id_and_to_type"
+    t.index ["to_type", "to_id"], name: "index_invitees_friends_on_to"
   end
 
   create_table "payments", force: :cascade do |t|
