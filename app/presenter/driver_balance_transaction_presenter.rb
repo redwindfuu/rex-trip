@@ -1,10 +1,5 @@
 
-class DriverBalanceTransactionPresenter
-
-  def initialize (model)
-    @model = model
-  end
-
+class DriverBalanceTransactionPresenter < BasePresenter
   def as_json (options = {})
     res = {
         id: @model["id"],
@@ -24,7 +19,7 @@ class DriverBalanceTransactionPresenter
         }
     }
 
-    if (@model.admin.present?) 
+    if @model.admin.present? 
       res.merge!(
         {
           admin: {
@@ -35,7 +30,6 @@ class DriverBalanceTransactionPresenter
       )
     end
 
-    return res
-
+    res
   end
 end

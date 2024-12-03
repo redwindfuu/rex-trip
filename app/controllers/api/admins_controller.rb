@@ -49,7 +49,6 @@ class Api::AdminsController < ApplicationController
 
   def get_driver
     driver = Driver.find(params[:id])
-    binding.pry
     render_json(
       DriverPresenter.new(driver, show_more_info: "detail"), 
                 status: :ok,

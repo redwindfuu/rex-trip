@@ -1,6 +1,6 @@
 class BasePresenter < SimpleDelegator
   attr_reader :model, :view
-  def initialize model, view
+  def initialize(model, view = nil)
     @model, @view = model, view
     super @model
   end
@@ -8,5 +8,4 @@ class BasePresenter < SimpleDelegator
   def as_json
     raise NotImplementedError
   end
-
 end

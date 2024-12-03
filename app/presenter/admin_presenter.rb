@@ -1,14 +1,11 @@
-class AdminPresenter 
-  def initialize(admin)
-    @admin = admin
-  end
-
+class AdminPresenter < BasePresenter
+  
   def as_json
     {
-      id: @admin.id,
-      username: @admin.username,
-      uuid: @admin.uuid,
-      role: @admin.role
+      id: @model.id,
+      username: @model.username,
+      uuid: @model.uuid,
+      role: @model.role
     }
   end
 end
