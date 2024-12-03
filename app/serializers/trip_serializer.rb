@@ -22,6 +22,7 @@
 #  fee_rate        :float
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  end_time_real   :datetime
 #
 class TripSerializer < ActiveModel::Serializer
   attributes :id, :uuid, :fight_no, :booking_time, :seat, :trip_status, :rating, :total_price
