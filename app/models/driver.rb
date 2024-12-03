@@ -65,8 +65,8 @@ class Driver < ApplicationRecord
   has_many :trips
   has_many :balance_transaction, class_name: "DriverBalanceTransaction", foreign_key: "driver_id"
   
-  has_many :sent_invites, as: :from, class_name: "InviteesFriend", dependent: :destroy
-  has_many :received_invites, as: :to, class_name: "InviteesFriend", dependent: :destroy
+  has_many :sent_invites, as: :inviter, class_name: "InviteesFriend", dependent: :destroy
+  has_many :received_invites, as: :inviteable, class_name: "InviteesFriend", dependent: :destroy
   
   validates :username, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true

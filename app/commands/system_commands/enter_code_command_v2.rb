@@ -39,11 +39,7 @@ module SystemCommands
 
       InvitedFriend.transaction do
         inviter.increment!(:amount_invite)
-        # cách 1 
-        InviteesFriend.create!(from: invitees, to: inviter)
-        # cách 2
-        # InviteesFriend.create!(from_id: inviter.id, from_type: inviter.class.name, to_id: invitees.id, to_type: invitees.class.name)
-
+        InviteesFriend.create!(inviteable: invitees, inviter: inviter)
       end
     end
 
