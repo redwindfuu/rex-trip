@@ -118,7 +118,8 @@ class Api::AdminsController < ApplicationController
   end
 
   def send_mail 
-    render_json({}, status: :ok, message: "Mail sent successfully")
+    TweetNotifierJob.perform_later(" Ash Red")
+    render json: {}, status: :ok
   end
 
   private
@@ -152,3 +153,4 @@ class Api::AdminsController < ApplicationController
     params.permit(:old_password, :new_password, :confirm_password)
   end
 end
+

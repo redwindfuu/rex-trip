@@ -71,3 +71,9 @@ gem "rexy_admin", git: "git@github.com:Rexy-Technology/rexy-admin.git", branch: 
 gem "faker"
 
 gem "kaminari", "~> 1.2.1"
+
+gem "sidekiq"
+
+gem "redis"
+
+gem "redis-objects"

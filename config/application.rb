@@ -17,10 +17,10 @@ module RexTrip
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore, key: '_your_app_session'
     config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins "*"
-
         resource "*",
                  headers: :any,
                  methods: [ :get, :post, :put, :patch, :delete, :options, :head ]
@@ -36,8 +36,7 @@ module RexTrip
     config.autoload_paths << Rails.root.join("lib")
     config.autoload_paths << Rails.root.join("app/helpers")
     config.autoload_paths << Rails.root.join("app/presenters")
-
-
+    config.active_job.queue_adapter = :sidekiq
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
