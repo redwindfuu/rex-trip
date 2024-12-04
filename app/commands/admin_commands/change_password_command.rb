@@ -14,7 +14,8 @@ module AdminCommands
         @admin.update(password: @params[:new_password], password_confirmation: @params[:confirm_password])
         { message: "Password changed successfully" }
       else
-        raise Errors::Invalid, "Password does not match"
+        errors.add(:password, "Password and confirm password do not match")
+        return
       end
     end
   end

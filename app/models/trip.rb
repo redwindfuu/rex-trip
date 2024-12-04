@@ -20,6 +20,7 @@
 #  fee_rate        :float
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  end_time_real   :datetime
 #
 require "bigdecimal"
 
@@ -35,6 +36,9 @@ class Trip < ApplicationRecord
 
 
   validates :seat, presence: true, numericality: { greater_than: 0 }
+  validates_associated :depart_place 
+  validates_associated :customer
+  validates_associated :driver, if: -> { driver_id.present? }
 
   before_create :before_request
 

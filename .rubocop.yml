@@ -10,3 +10,5 @@ Layout/EmptyLinesAroundBlockBody:
   Enabled: false
 Layout/TrailingWhitespace:
   Enabled: false
+Style/RedundantReturn:
+  Enabled: false

@@ -10,7 +10,10 @@ module DriverCommands
     end
 
     def call
-      raise Errors::BadRequest unless @username && @password
+      unless @username && @password
+        errors.add(:base, "Invalid credentials")
+        return nil
+      end
 
       if (user = Driver.find_by(username: @username)&.authenticate(@password))
         user_data = {

@@ -10,5 +10,9 @@
       "password": "postgres",
       "database": "trip_db"
     }
+  ],
+  "cSpell.words": [
+    "inviteable",
+    "Rexy"
   ]
 }

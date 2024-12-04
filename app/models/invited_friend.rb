@@ -11,12 +11,17 @@
 #  updated_at  :datetime         not null
 #
 class InvitedFriend < ApplicationRecord
+  belongs_to :inviter, polymorphic: true
+
   enum invite_type: {
     CC: 0,
     DD: 1,
     CD: 2,
     DC: 3
   }
+
+  
+
 
   def self.convert_type(type_int)
     case type_int

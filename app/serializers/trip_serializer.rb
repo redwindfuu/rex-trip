@@ -22,6 +22,7 @@
 #  fee_rate        :float
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  end_time_real   :datetime
 #
 class TripSerializer < ActiveModel::Serializer
   attributes :id, :uuid, :fight_no, :booking_time, :seat, :trip_status, :rating, :total_price
@@ -31,6 +32,22 @@ class TripSerializer < ActiveModel::Serializer
   has_many :arrivals, serializer: ArrivalSerializer
 
   def total_price
-        
+    object.total_price.to_f
+  end
+
+  def driver
+    object.driver
+  end
+
+  def customer
+    object.customer
+  end
+
+  def depart_place
+    object.depart_place
+  end
+
+  def arrivals
+    object.arrivals
   end
 end

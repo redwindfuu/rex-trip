@@ -20,6 +20,7 @@ module Api::ErrorHandler
   private
 
   def handle_error(e)
+    p e
     mapped = map_error(e)
     # notify about unexpected_error unless mapped
     mapped ||= Errors::ApplicationError.new

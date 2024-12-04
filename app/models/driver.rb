@@ -62,10 +62,18 @@ class Driver < ApplicationRecord
 
   belongs_to :kyc_by, class_name: "Admin", optional: true
 
+  has_many :trips
+  has_many :balance_transaction, class_name: "DriverBalanceTransaction", foreign_key: "driver_id"
+  
+  has_many :sent_invites, as: :inviter, class_name: "InviteesFriend", dependent: :destroy
+  has_many :received_invites, as: :inviteable, class_name: "InviteesFriend", dependent: :destroy
+  
   validates :username, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true
   validates :phone, presence: true, uniqueness: true
   validates :id_number, uniqueness: true, allow_nil: true
+  validates :full_name, presence: true
+
 
   before_create :preprocess_create
 

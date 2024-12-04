@@ -6,7 +6,6 @@
 #  uuid       :uuid             not null
 #  trip_id    :bigint           not null
 #  amount     :decimal(10, 2)
-#  time_event :datetime
 #  method     :integer          default("cash")
 #  status     :integer
 #  created_at :datetime         not null

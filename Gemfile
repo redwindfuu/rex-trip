@@ -45,10 +45,13 @@ group :development, :test do
   gem "brakeman", require: false
   
   
-gem "annotate" # Annotate Rails classes with schema information
+  gem "annotate" # Annotate Rails classes with schema information
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  
+
 end
 
 # gem 'will_paginate', '~> 4.0'
@@ -68,3 +71,12 @@ gem "rexy_admin", git: "git@github.com:Rexy-Technology/rexy-admin.git", branch: 
 gem "faker"
 
 gem "kaminari", "~> 1.2.1"
+
+gem "sidekiq"
+
+gem "redis"
+
+gem "redis-objects"
+
+
+gem 'whenever', require: false
