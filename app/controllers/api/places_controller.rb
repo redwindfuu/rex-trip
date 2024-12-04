@@ -17,7 +17,7 @@ class Api::PlacesController < ApplicationController
     if cmd.success?
       render_json(cmd.result, status: :ok, message: "Place fetched successfully")
     else
-      raise Errors::NotFound, cmd.errors
+      render json: { error: cmd.errors }, status: :unprocessable_entity
     end
   end
 

@@ -70,10 +70,10 @@ class Api::DriversController < ApplicationController
   end
 
   def logout
-    acc = token
-    add_blacklist_token(acc, "driver")
-    AuthCommands::RemoveRefreshTokenCommand.call(cookies[:auth_token], "driver")
-    render json: { message: "You are logged out!" }, status: :ok
+    # acc = token
+    # add_blacklist_token(acc, "driver")
+    # AuthCommands::RemoveRefreshTokenCommand.call(cookies[:auth_token], "driver")
+    # render json: { message: "You are logged out!" }, status: :ok
   end
 
   def refresh_token

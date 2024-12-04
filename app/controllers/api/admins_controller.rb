@@ -24,7 +24,7 @@ class Api::AdminsController < ApplicationController
     if command.success?
       render json: { message: "Transaction updated successfully", data: nil }, status: :ok
     else
-      raise Errors::Invalid, "Transaction update failed"
+      render json: { message: "Transaction update failed", data: nil }, status: :unprocessable_entity
     end
   end
 
@@ -33,7 +33,7 @@ class Api::AdminsController < ApplicationController
     if command.success?
       render json: { message: "Review successful", data: nil }, status: :ok
     else
-      raise Errors::Invalid, "Review failed"
+      render json: { message: "Review failed", data: nil }, status: :unprocessable_entity
     end
   end
 
@@ -57,9 +57,8 @@ class Api::AdminsController < ApplicationController
 
   def get_customers
     customers = Customer.all.page(pagination[:page]).per(pagination[:per_page])
-    render_json(ActiveModelSerializers::SerializableResource.new(
-        customers,
-        each_serializer: CustomerSerializer),
+    render_json(
+    CollectionPresenter.new(customers, CustomerPresenter),
                   status: :ok,
                   meta: pagination_meta(customers),
                   message: "Customers fetched successfully"
@@ -69,7 +68,7 @@ class Api::AdminsController < ApplicationController
 
   def get_customer
     customer = Customer.find(params[:id])
-    render_json(CustomerSerializer.new(customer), status: :ok, message: "Customer fetched successfully")
+    render_json(CustomerPresenter.new(customer), status: :ok, message: "Customer fetched successfully")
   end
 
   def change_password
@@ -77,23 +76,25 @@ class Api::AdminsController < ApplicationController
     if command.success? && command.result
       render json: { message: "Password changed successfully" }, status: :ok
     else
-      raise Errors::ApplicationError, command.errors
+      render json: { message: "Password change failed" }, status: :unprocessable_entity
     end
   end
 
   def get_trips
     trips = Trip.all
-      render_json(ActiveModelSerializers::SerializableResource.new(
-        trips.page(pagination[:page]).per(pagination[:per_page]),
-        each_serializer: TripSerializer),
+      .eager_load(:driver)
+      .eager_load(:customer)
+    .page(pagination[:page]).per(pagination[:per_page])
+      render_json(
+        CollectionPresenter.new(trips, TripPresenter),
                   status: :ok,
-                  meta: { total: trips.length },
+                  meta: pagination_meta(trips),
                   message: "Trips fetched successfully"
       )
   end
 
   def get_information
-    render_json(AdminSerializer.new(@current_admin), status: :ok, message: "Admin information fetched successfully")
+    render_json(AdminPresenter.new(@current_admin), status: :ok, message: "Admin information fetched successfully")
   end
 
   def login
@@ -102,24 +103,23 @@ class Api::AdminsController < ApplicationController
       cookies[:auth_token_admin] = command.result[:refresh_token]
       render_json(command.result, status: :ok, message: "Login successful")
     else
-      raise Errors::Unauthorized, "Invalid username or password"
+      render json: { message: "Invalid username or password" }, status: :unauthorized
     end
   end
 
   def logout
-    acc = token
-    add_blacklist_token(acc, "admin")
-    AuthCommands::RemoveRefreshTokenCommand.call(cookies[:auth_token_admin], "admin")
-    render json: { message: "You are logged out!" }, status: :ok
+    # acc = token
+    # add_blacklist_token(acc, "admin")
+    # AuthCommands::RemoveRefreshTokenCommand.call(cookies[:auth_token_admin], "admin")
+    # render json: { message: "You are logged out!" }, status: :ok
   end
 
   def refresh_token
-    
+    # disable refresh token mechanism    
   end
 
   def send_mail 
-    TweetNotifierJob.perform_later(" Ash Red")
-    render json: {}, status: :ok
+
   end
 
   private

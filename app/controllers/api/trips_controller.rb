@@ -6,9 +6,9 @@ class Api::TripsController < ApplicationController
       .eager_load(:driver, :customer, :depart_place, :arrivals)
     .page(pagination[:page]).per(pagination[:per_page]).order("trips.created_at DESC")
     render_json(
-      ActiveModelSerializers::SerializableResource.new(
-        trips,
-        each_serializer: TripSerializer),
+      CollectionPresenter.new(trips, TripPresenter).as_json({
+        show_more_info: "detail"
+      }),
       status: :ok,
       message: "Trips fetched successfully",
       meta: pagination_meta(trips)
@@ -51,7 +51,6 @@ class Api::TripsController < ApplicationController
     @trip.destroy
     render_json(@trip, status: :ok)
   end
-
 
   private
   def trip_params

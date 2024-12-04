@@ -1,6 +1,7 @@
 class AdminPresenter < BasePresenter
   
-  def as_json
+  def as_json(*)
+    
     {
       id: @model.id,
       username: @model.username,

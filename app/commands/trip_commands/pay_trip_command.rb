@@ -28,10 +28,8 @@ module TripCommands
         total_paid = Payment.where(trip_id: trip_id).sum(:amount) # Tính tổng mà không khóa
         if total_paid + amount > trip.total_price
           errors.add(:error, "Amount paid exceeds total price")
-          return
+          throw ActiveRecord::Rollback
         end
-
-        payments = Payment.where(trip_id: trip_id).lock # Khóa bản ghi để ngăn cập nhật song song
         Payment.create!(trip_id: trip_id, amount: amount)
       end
     end

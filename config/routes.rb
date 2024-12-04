@@ -45,6 +45,7 @@ Rails.application.routes.draw do
         get "trips/histories" => "customers#trip_histories"
         post "trips/request" => "customers#request_trip"
         post "trips/:trip_id/rate" => "customers#rate_trip"
+        post "trips/pre-calculate" => "customers#pre_calculate"
         post "login" => "customers#login"
         post "logout" => "customers#logout"
         post "refresh" => "customers#refresh_token"

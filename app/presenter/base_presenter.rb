@@ -5,7 +5,7 @@ class BasePresenter < SimpleDelegator
     super @model
   end
 
-  def as_json
+  def as_json(*)
     raise NotImplementedError
   end
 end

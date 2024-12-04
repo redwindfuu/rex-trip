@@ -23,8 +23,11 @@ class Payment < ApplicationRecord
   before_create :before_request
 
   def before_request
-    self.time_event = Time.zone.now
     self.status = Payment.statuses[:success]
+    trip = Trip.find_by(id: self.trip_id)
+    if trip.payments.sum(:amount) + self.amount > trip.total_price
+      errors.add(:error, "Amount paid exceeds total price")
+    end
   end
 
   def self.check_payment_enough(trip_id, total)

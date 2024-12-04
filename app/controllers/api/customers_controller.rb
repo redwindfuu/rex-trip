@@ -36,6 +36,15 @@ class Api::CustomersController < ApplicationController
     end
   end
 
+  def pre_calculate
+    cmd = PlaceCommands::PreCalculateCommand.call(params[:from_place_id], params[:tos])
+    if cmd.success?
+      render_json(cmd.result, status: :ok)
+    else
+      render json: { error: cmd.errors }, status: :unprocessable_entity
+    end
+  end
+
 
   def create
     validator = CustomerValidator::CreateCustomerValidator.call(params: create_customer_params)
@@ -76,10 +85,10 @@ class Api::CustomersController < ApplicationController
   end
 
   def logout
-    acc = token
-    add_blacklist_token(acc, "customer")
-    AuthCommands::RemoveRefreshTokenCommand.call(cookies[:auth_token_customer], "customer")
-    render json: { message: "You are logged out!" }, status: :ok
+    # acc = token
+    # add_blacklist_token(acc, "customer")
+    # AuthCommands::RemoveRefreshTokenCommand.call(cookies[:auth_token_customer], "customer")
+    # render json: { message: "You are logged out!" }, status: :ok
   end
 
   private

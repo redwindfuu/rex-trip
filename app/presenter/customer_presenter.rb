@@ -40,7 +40,7 @@ class CustomerPresenter < BasePresenter
     @model.amount_invite
   end
 
-  def as_json
+  def as_json(*)
     {
       id:,
       uuid:,
