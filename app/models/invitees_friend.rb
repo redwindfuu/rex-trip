@@ -13,6 +13,7 @@
 class InviteesFriend < ApplicationRecord
   belongs_to :inviter, polymorphic: true # Could be Driver or Customer
   belongs_to :inviteable, polymorphic: true   # Could be Driver or Customer
+ 
   belongs_to :driver_inviteable, -> { where(
     invitees_friends: { inviteable_type: "Driver" }
   ) }, class_name: "Driver", foreign_key: "inviteable_id", optional: true

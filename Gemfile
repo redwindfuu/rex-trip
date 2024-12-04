@@ -77,3 +77,6 @@ gem "sidekiq"
 gem "redis"
 
 gem "redis-objects"
+
+
+gem 'whenever', require: false

@@ -119,7 +119,7 @@ class Api::AdminsController < ApplicationController
   end
 
   def send_mail 
-
+    render json: { message: "Mail sent" }, status: :ok
   end
 
   private

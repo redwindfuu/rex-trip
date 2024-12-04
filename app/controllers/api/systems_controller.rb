@@ -1,9 +1,12 @@
 class Api::SystemsController < ApplicationController
   before_action :is_auth?
-
+  # deliver_now and deliver_later
   def invitees
-    invitees = get_user.sent_invites.left_joins(:customer_inviteable, :driver_inviteable)
-      .select("*").map do |invitee|
+    invitees = get_user.sent_invites
+      .left_joins(:customer_inviteable, :driver_inviteable)
+      .page(params[:page]).per(params[:per_page]).order(created_at: :desc)
+      .select("*")
+      .map do |invitee|
         {
           "created_at": invitee.created_at,
           "name_invitees": invitee.full_name,
@@ -11,8 +14,10 @@ class Api::SystemsController < ApplicationController
           "type_invitees": invitee.inviteable_type
         }
       end
-    
-    render_json(invitees, status: :ok, message: "Invitees fetched successfully") 
+    # customer join left invitees_friends 
+    #          join left driver on driver.id = invitees_friends.inviteable_id and invitees_friends.inviteable_type = "Driver"
+    #         join left customer on customer.id = invitees_friends.inviteable_id and invitees_friends.inviteable_type = "Customer"
+    render_json(invitees, status: :ok, message: "Invitees fetched successfully", meta: pagination_meta(invitees)) 
   end
 
   def enter_code
